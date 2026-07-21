@@ -165,7 +165,7 @@ Displays financial statistics based on the recorded expenses:
 
   +----------------------------------------------+
   |  TOTAL SPENT :   2500.50                     |
-  |  TOTAL ITEMS :   3                            |
+  |  TOTAL ITEMS :   3                           |
   |  AVERAGE COST:   833.50/item                 |
   +----------------------------------------------+
 
