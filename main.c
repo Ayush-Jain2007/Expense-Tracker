@@ -120,9 +120,9 @@ void spendSummary(){
     printf("==================================================\n\n");
     printf("  +----------------------------------------------+\n");
     
-    printf("  |  TOTAL SPENT :   %-5.2f                     |\n", total_spent);
-    printf("  |  TOTAL ITEMS :   %-3d                       |\n", count);
-    printf("  |  AVERAGE COST:   %-5.2f/item                |\n", average_cost);
+    printf("  |  TOTAL SPENT :   %10.2f                     |\n", total_spent);
+    printf("  |  TOTAL ITEMS :   %10d                     |\n", count);
+    printf("  |  AVERAGE COST:   %10.2f/item                |\n", average_cost);
     
     printf("  +----------------------------------------------+\n");
     printf("\n  [!] Largest Expense :  %-5.2f (%s)\n", expenses[max_index].amount, expenses[max_index].description);
