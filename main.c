@@ -9,15 +9,16 @@ int main()
     int choice;
     do
     {
-        printf("===============================================================================\n");
+        printf("\n===============================================================================\n");
         printf("                            PERSONAL EXPENSE TRACKER\n");
         printf("===============================================================================\n");
         printf("\n  [1] Add New Expense\n");
         printf("  [2] View All Expenses\n");
         printf("  [3] View Total Spending Summary\n");
-        printf("  [4] Exit Application\n");
+        printf("  [4] Search Expense By ID\n");
+        printf("  [5] Exit Application\n");
         printf("\n-------------------------------------------------------------------------------\n");
-        printf("Enter your choice (1-4): ");
+        printf("Enter your choice (1-5): ");
 
         if (scanf("%d", &choice) != 1)
         {
@@ -60,15 +61,19 @@ int main()
             break;
 
         case 4:
+            viewExpenseById();
+            break;
+
+        case 5:
             printf("Exiting...\n");
             break;
 
         default:
-            printf("Enter a number between 1 and 4.\n");
+            printf("Enter a number between 1 and 5.\n");
             break;
         }
 
-    } while (choice != 4);
+    } while (choice != 5);
 
     return 0;
 }

@@ -23,8 +23,11 @@ extern int count;
 extern struct Expense expenses[MAX_EXPENSES];
 
 int isValidDate(int day, int month, int year);
-void addNewExpense();
-void viewAllExpenses();
-void spendSummary();
+int findExpenseById(int id);
+
+void addNewExpense(void);
+void viewAllExpenses(void);
+void spendSummary(void);
+void viewExpenseById(void);
 
 #endif

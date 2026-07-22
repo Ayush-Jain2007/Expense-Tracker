@@ -34,6 +34,17 @@ int isValidDate(int day, int month, int year){
     return 1;
 }
 
+int findExpenseById(int id){
+    for (int i = 0; i < count; i++)
+    {
+        if (id == expenses[i].id)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
 void addNewExpense()
 {
     // Removing leftover \n
@@ -124,6 +135,9 @@ void viewAllExpenses()
                expenses[i].amount);
     }
     printf("-------------------------------------------------------------------------------\n");
+    printf("Press Enter to continue...");
+    getchar();
+    getchar();
 }
 
 void spendSummary()
@@ -158,5 +172,43 @@ void spendSummary()
     printf("\n  [!] Largest Expense :  %-5.2f (%s)\n", expenses[max_index].amount, expenses[max_index].description);
     printf("  [*] Smallest Expense:  %-5.2f (%s)\n", expenses[min_index].amount, expenses[min_index].description);
     printf("\n==================================================\n");
+    printf("Press Enter to continue...");
+    getchar();
+    getchar();
 }
 
+void viewExpenseById(){
+    int id;
+
+    printf("\nEnter ID: ");
+    if (scanf("%d", &id) != 1)
+    {
+        printf("Wrong ID!\n");
+        return;
+    }
+    int index = findExpenseById(id);
+    if (index == -1)
+    {
+        printf("ID doesn't exists!\n");
+        return;
+    }
+    else
+    {
+        printf("===============================================================================\n");
+        printf("                                 EXPENSE BY ID\n");
+        printf("===============================================================================\n");
+        printf("%-6s | %-10s | %-15s | %-25s | %-10s\n", "ID", "Date", "Category", "Description", "Amount ($)");
+        printf("-------------------------------------------------------------------------------\n");
+        printf("%-6d | %02d/%02d/%-4d | %-15s | %-25s | $%-9.2f\n",
+               expenses[index].id,
+               expenses[index].date.day, expenses[index].date.month, expenses[index].date.year,
+               expenses[index].category,
+               expenses[index].description,
+               expenses[index].amount);
+        printf("-------------------------------------------------------------------------------\n\n");
+        printf("Press Enter to continue...");
+        getchar();
+        getchar();
+    }
+    
+}

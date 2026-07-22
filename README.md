@@ -2,13 +2,13 @@
 
 A console-based personal expense tracker written in **C**. This project allows users to record, view, and analyze their daily expenses through a simple terminal interface.
 
-The project is being developed incrementally to practice core C programming concepts such as structures, arrays, functions, file handling, input validation, and modular program design.
+The project is being developed incrementally to practice core C programming concepts such as structures, arrays, functions, file handling, input validation, modular programming, and project organization.
 
 ---
 
 ## Current Version
 
-**Version 1.2 — File Persistence**
+**Version 1.4 — Expense Lookup by ID**
 
 ---
 
@@ -23,6 +23,8 @@ The project is being developed incrementally to practice core C programming conc
   * Amount
   * Date
 * View all recorded expenses in a formatted table
+* Search for an expense by ID
+* Display a single expense by ID
 * Calculate a spending summary
 * Display:
 
@@ -47,7 +49,6 @@ The project is being developed incrementally to practice core C programming conc
 * **Libraries:**
 
   * `stdio.h`
-  * `stdlib.h`
   * `string.h`
 
 ---
@@ -58,11 +59,61 @@ The project is being developed incrementally to practice core C programming conc
 expense-tracker/
 │
 ├── main.c
+├── expense.c
+├── expense.h
+├── file.c
+├── file.h
 ├── expenses.dat
+├── output/
 └── README.md
 ```
 
-> The current version is implemented in a single C source file. The project will be refactored into multiple source and header files in a future version.
+> `expenses.dat` and the `output/` directory are generated locally and are ignored by Git.
+
+### File Responsibilities
+
+#### `main.c`
+
+Contains:
+
+* Main menu
+* User input for menu choices
+* Program flow
+
+#### `expense.c`
+
+Contains:
+
+* Expense data
+* Expense creation
+* Expense display
+* Expense lookup
+* Date validation
+* Spending summary
+
+#### `expense.h`
+
+Contains:
+
+* `Date` structure
+* `Expense` structure
+* Shared constants
+* Global variable declarations
+* Expense function prototypes
+
+#### `file.c`
+
+Contains:
+
+* Saving expenses
+* Loading expenses
+* Binary file handling
+
+#### `file.h`
+
+Contains:
+
+* File function prototypes
 
 ---
 
@@ -129,7 +180,7 @@ This allows expense data to persist between program executions.
 Using GCC:
 
 ```bash
-gcc main.c -o expense_tracker
+gcc main.c expense.c file.c -o output/expense_tracker
 ```
 
 ---
@@ -138,14 +189,14 @@ gcc main.c -o expense_tracker
 
 ### Windows
 
-```bash
-expense_tracker.exe
+```powershell
+.\output\expense_tracker.exe
 ```
 
 ### Linux / macOS
 
 ```bash
-./expense_tracker
+./output/expense_tracker
 ```
 
 ---
@@ -161,9 +212,12 @@ After starting the program, the following menu is displayed:
 
   [1] Add New Expense
   [2] View All Expenses
-  [3] View Total Spending Summary
-  [4] Exit Application
+  [3] View Expense By ID
+  [4] View Total Spending Summary
+  [5] Exit Application
 ```
+
+---
 
 ### 1. Add New Expense
 
@@ -194,7 +248,33 @@ ID     | Date       | Category        | Description               | Amount ($)
 
 ---
 
-### 3. View Total Spending Summary
+### 3. View Expense By ID
+
+Allows the user to search for a specific expense using its unique ID.
+
+```text
+Enter ID: 1920
+```
+
+The matching expense is then displayed.
+
+If the ID does not exist:
+
+```text
+ID doesn't exist!
+```
+
+The lookup is implemented using:
+
+```c
+int findExpenseById(int id);
+```
+
+This function searches the expense array and returns the matching array index.
+
+---
+
+### 4. View Total Spending Summary
 
 Displays financial statistics based on the recorded expenses:
 
@@ -204,9 +284,9 @@ Displays financial statistics based on the recorded expenses:
 ==================================================
 
   +----------------------------------------------+
-  |  TOTAL SPENT :   2500.50                     |
-  |  TOTAL ITEMS :   3                           |
-  |  AVERAGE COST:   833.50                     |
+  |  TOTAL SPENT :  2500.50                      |
+  |  TOTAL ITEMS :     3                         |
+  |  AVERAGE COST:   833.50/item                 |
   +----------------------------------------------+
 
   [!] Largest Expense :  1250.50 (Grocery Shopping)
@@ -259,6 +339,10 @@ This project uses several important C programming concepts:
 * Arrays of structures
 * Functions
 * Function prototypes
+* Header files
+* Header guards
+* Multiple source files
+* `extern` variables
 * `scanf()` input handling
 * `fgets()` string input
 * Input buffer cleanup
@@ -274,6 +358,7 @@ This project uses several important C programming concepts:
 * `fwrite()`
 * Input validation
 * Leap year calculations
+* Array searching
 * Basic statistical calculations
 * Formatted output using `printf()`
 
@@ -303,6 +388,21 @@ This project uses several important C programming concepts:
 * Preserve expense data between program executions
 * Validate loaded expense count
 
+### Version 1.3 — Modular Project Structure
+
+* Split the program into multiple source files
+* Create separate header files
+* Separate expense logic from file handling
+* Use `extern` for shared global variables
+* Add header guards
+
+### Version 1.4 — Expense Lookup by ID
+
+* Search for an expense by ID
+* Display a single expense
+* Handle non-existent expense IDs
+* Create reusable `findExpenseById()` function
+
 ---
 
 ## Current Limitations
@@ -311,12 +411,12 @@ This project uses several important C programming concepts:
 * Expenses are stored in a binary file
 * No edit functionality
 * No delete functionality
-* No search functionality
+* No search by description
 * No category filtering
 * No date filtering
 * No sorting functionality
-* The project is currently implemented in a single `.c` file
 * The program uses `float` for monetary values
+* Input handling can be further improved
 
 ---
 
@@ -325,6 +425,8 @@ This project uses several important C programming concepts:
 * [x] Save expenses to a file
 * [x] Load expenses when the program starts
 * [x] Add proper date validation
+* [x] Refactor the project into multiple `.c` and `.h` files
+* [x] Search for an expense by ID
 * [ ] Edit an existing expense
 * [ ] Delete an expense
 * [ ] Search expenses by description
@@ -332,9 +434,9 @@ This project uses several important C programming concepts:
 * [ ] Filter expenses by date
 * [ ] Sort expenses by amount or date
 * [ ] Generate category-wise spending summaries
-* [ ] Refactor the project into multiple `.c` and `.h` files
 * [ ] Add a build system such as a `Makefile`
 * [ ] Replace fixed-size storage with dynamic memory
+* [ ] Improve monetary value handling using integer cents instead of `float`
 
 ---
 
