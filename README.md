@@ -1,6 +1,6 @@
 # Personal Expense Tracker
 
-A console-based personal expense tracker written in **C**. This project allows users to record, view, and analyze their daily expenses through a simple terminal interface.
+A console-based personal expense tracker written in **C**. This project allows users to record, view, manage, and analyze their daily expenses through a simple terminal interface.
 
 The project is being developed incrementally to practice core C programming concepts such as structures, arrays, functions, file handling, input validation, modular programming, and project organization.
 
@@ -8,7 +8,7 @@ The project is being developed incrementally to practice core C programming conc
 
 ## Current Version
 
-**Version 1.4 — Expense Lookup by ID**
+**Version 1.5 — Delete Expense by ID**
 
 ---
 
@@ -25,6 +25,7 @@ The project is being developed incrementally to practice core C programming conc
 * View all recorded expenses in a formatted table
 * Search for an expense by ID
 * Display a single expense by ID
+* Delete an expense by ID
 * Calculate a spending summary
 * Display:
 
@@ -63,12 +64,12 @@ expense-tracker/
 ├── expense.h
 ├── file.c
 ├── file.h
-├── expenses.dat
-├── output/
-└── README.md
+├── .gitignore
+├── README.md
+│
+├── expenses.dat      # Generated locally, ignored by Git
+└── output/           # Build output, ignored by Git
 ```
-
-> `expenses.dat` and the `output/` directory are generated locally and are ignored by Git.
 
 ### File Responsibilities
 
@@ -88,6 +89,7 @@ Contains:
 * Expense creation
 * Expense display
 * Expense lookup
+* Expense deletion
 * Date validation
 * Spending summary
 
@@ -157,7 +159,7 @@ expenses.dat
 
 When the program starts, previously saved expenses are loaded from the file.
 
-When a new expense is added, the updated expense data is saved automatically.
+When an expense is added or deleted, the updated expense data is saved automatically.
 
 ```text
 Program starts
@@ -166,7 +168,7 @@ Load expenses.dat
       ↓
 Use application
       ↓
-Add expense
+Add or delete expense
       ↓
 Save expenses.dat
 ```
@@ -181,6 +183,12 @@ Using GCC:
 
 ```bash
 gcc main.c expense.c file.c -o output/expense_tracker
+```
+
+For additional compiler warnings:
+
+```bash
+gcc -Wall -Wextra -g main.c expense.c file.c -o output/expense_tracker
 ```
 
 ---
@@ -213,8 +221,9 @@ After starting the program, the following menu is displayed:
   [1] Add New Expense
   [2] View All Expenses
   [3] View Expense By ID
-  [4] View Total Spending Summary
-  [5] Exit Application
+  [4] Delete Expense By ID
+  [5] View Total Spending Summary
+  [6] Exit Application
 ```
 
 ---
@@ -274,7 +283,32 @@ This function searches the expense array and returns the matching array index.
 
 ---
 
-### 4. View Total Spending Summary
+### 4. Delete Expense By ID
+
+Allows the user to delete a specific expense using its ID.
+
+```text
+Enter ID: 1920
+Expense deleted successfully!
+```
+
+When an expense is deleted, the remaining expenses are shifted left in the array:
+
+```text
+Before:
+[Expense A] [Expense B] [Expense C] [Expense D]
+
+Delete Expense B:
+
+After:
+[Expense A] [Expense C] [Expense D]
+```
+
+The updated expense list is then saved to `expenses.dat`.
+
+---
+
+### 5. View Total Spending Summary
 
 Displays financial statistics based on the recorded expenses:
 
@@ -359,6 +393,7 @@ This project uses several important C programming concepts:
 * Input validation
 * Leap year calculations
 * Array searching
+* Array element shifting
 * Basic statistical calculations
 * Formatted output using `printf()`
 
@@ -403,6 +438,15 @@ This project uses several important C programming concepts:
 * Handle non-existent expense IDs
 * Create reusable `findExpenseById()` function
 
+### Version 1.5 — Delete Expense by ID
+
+* Delete an expense using its ID
+* Reuse `findExpenseById()` to locate expenses
+* Shift remaining expenses after deletion
+* Decrease the total expense count
+* Save the updated expense data to the binary file
+* Handle non-existent expense IDs
+
 ---
 
 ## Current Limitations
@@ -410,7 +454,6 @@ This project uses several important C programming concepts:
 * Maximum of 100 expenses
 * Expenses are stored in a binary file
 * No edit functionality
-* No delete functionality
 * No search by description
 * No category filtering
 * No date filtering
@@ -427,8 +470,8 @@ This project uses several important C programming concepts:
 * [x] Add proper date validation
 * [x] Refactor the project into multiple `.c` and `.h` files
 * [x] Search for an expense by ID
+* [x] Delete an expense by ID
 * [ ] Edit an existing expense
-* [ ] Delete an expense
 * [ ] Search expenses by description
 * [ ] Filter expenses by category
 * [ ] Filter expenses by date

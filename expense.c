@@ -212,3 +212,38 @@ void viewExpenseById(){
     }
     
 }
+
+void deleteExpenseById(){
+    int id;
+
+    if (count == 0)
+    {
+        printf("No Data to be deleted.\n");
+        return;
+    }
+
+    printf("\nEnter ID: ");
+    if (scanf("%d", &id) != 1)
+    {
+        printf("Wrong ID!\n");
+        return;
+    }
+    int index = findExpenseById(id);
+    if (index == -1)
+    {
+        printf("ID doesn't exists!\n");
+        return;
+    }
+    else
+    {
+        for (int j = index; j < (count-1); j++)
+        {
+            expenses[j] = expenses[j+1];
+        }
+    }
+    count--;
+
+    saveExpenses();
+
+    printf("Expense Deleted Successfully!\n");
+}
