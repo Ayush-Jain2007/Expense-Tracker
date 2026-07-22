@@ -2,14 +2,20 @@
 
 A console-based personal expense tracker written in **C**. This project allows users to record, view, and analyze their daily expenses through a simple terminal interface.
 
-The project was built to practice core C programming concepts such as structures, arrays, functions, input handling, and modular program design.
+The project is being developed incrementally to practice core C programming concepts such as structures, arrays, functions, file handling, input validation, and modular program design.
+
+---
+
+## Current Version
+
+**Version 1.2 — File Persistence**
 
 ---
 
 ## Features
 
 * Add new expenses
-* Automatically generate a unique expense ID
+* Automatically generate expense IDs
 * Store:
 
   * Expense description
@@ -25,7 +31,11 @@ The project was built to practice core C programming concepts such as structures
   * Average expense amount
   * Largest expense
   * Smallest expense
-* Input validation for numeric values
+* Validate numeric input
+* Validate expense amounts
+* Validate dates, including leap years
+* Save expenses to a binary file
+* Load previously saved expenses when the program starts
 * Supports up to **100 expenses**
 
 ---
@@ -37,6 +47,7 @@ The project was built to practice core C programming concepts such as structures
 * **Libraries:**
 
   * `stdio.h`
+  * `stdlib.h`
   * `string.h`
 
 ---
@@ -47,14 +58,15 @@ The project was built to practice core C programming concepts such as structures
 expense-tracker/
 │
 ├── main.c
+├── expenses.dat
 └── README.md
 ```
 
-> The current version is implemented in a single C source file. The project can later be refactored into multiple files as it grows.
+> The current version is implemented in a single C source file. The project will be refactored into multiple source and header files in a future version.
 
 ---
 
-## Data Structure
+## Data Structures
 
 Each expense is represented using a `struct Expense`.
 
@@ -81,6 +93,34 @@ struct Date
 ```
 
 This demonstrates the use of **nested structures** in C.
+
+---
+
+## File Persistence
+
+Expenses are stored in a binary file named:
+
+```text
+expenses.dat
+```
+
+When the program starts, previously saved expenses are loaded from the file.
+
+When a new expense is added, the updated expense data is saved automatically.
+
+```text
+Program starts
+      ↓
+Load expenses.dat
+      ↓
+Use application
+      ↓
+Add expense
+      ↓
+Save expenses.dat
+```
+
+This allows expense data to persist between program executions.
 
 ---
 
@@ -138,7 +178,7 @@ Enter Month: 7
 Enter Year: 2026
 ```
 
-The expense is then stored in memory.
+The expense is validated and then saved to `expenses.dat`.
 
 ---
 
@@ -166,11 +206,46 @@ Displays financial statistics based on the recorded expenses:
   +----------------------------------------------+
   |  TOTAL SPENT :   2500.50                     |
   |  TOTAL ITEMS :   3                           |
-  |  AVERAGE COST:   833.50/item                 |
+  |  AVERAGE COST:   833.50                     |
   +----------------------------------------------+
 
   [!] Largest Expense :  1250.50 (Grocery Shopping)
   [*] Smallest Expense:  250.00 (Transport)
+```
+
+---
+
+## Input Validation
+
+The program validates:
+
+### Expense Amount
+
+* Must be a valid number.
+* Must be greater than `0`.
+
+### Day
+
+* Must be between `1` and `31`.
+* Must be valid for the selected month.
+
+### Month
+
+* Must be between `1` and `12`.
+
+### Year
+
+* Must be between `1` and `3000`.
+
+### Leap Years
+
+The program correctly handles leap years.
+
+For example:
+
+```text
+29/02/2024 → Valid
+29/02/2025 → Invalid
 ```
 
 ---
@@ -191,32 +266,65 @@ This project uses several important C programming concepts:
 * Loops
 * Conditional statements
 * `switch` statements
+* File handling
+* Binary file I/O
+* `fopen()`
+* `fclose()`
+* `fread()`
+* `fwrite()`
+* Input validation
+* Leap year calculations
 * Basic statistical calculations
 * Formatted output using `printf()`
 
 ---
 
+## Version History
+
+### Version 1.0 — Basic Expense Tracker
+
+* Add expenses
+* View all expenses
+* Calculate spending summary
+* Store expense information using structures
+
+### Version 1.1 — Improved Reliability
+
+* Validate expense amounts
+* Reject zero and negative amounts
+* Validate day, month, and year ranges
+* Add comprehensive date validation
+* Add leap year support
+
+### Version 1.2 — File Persistence
+
+* Save expenses to a binary file
+* Load expenses when the program starts
+* Preserve expense data between program executions
+* Validate loaded expense count
+
+---
+
 ## Current Limitations
 
-The current version stores all expenses in memory only.
-
-This means:
-
-* Data is lost when the program exits
-* The maximum number of expenses is limited to 100
-* Dates are not yet fully validated
-* Categories cannot yet be filtered
-* Expenses cannot yet be edited or deleted
+* Maximum of 100 expenses
+* Expenses are stored in a binary file
+* No edit functionality
+* No delete functionality
+* No search functionality
+* No category filtering
+* No date filtering
+* No sorting functionality
+* The project is currently implemented in a single `.c` file
 * The program uses `float` for monetary values
 
 ---
 
 ## Future Improvements
 
-Planned improvements include:
-
-* [ ] Save expenses to a file
-* [ ] Load expenses when the program starts
+* [x] Save expenses to a file
+* [x] Load expenses when the program starts
+* [x] Add proper date validation
 * [ ] Edit an existing expense
 * [ ] Delete an expense
 * [ ] Search expenses by description
@@ -224,9 +332,9 @@ Planned improvements include:
 * [ ] Filter expenses by date
 * [ ] Sort expenses by amount or date
 * [ ] Generate category-wise spending summaries
-* [ ] Add proper date validation
 * [ ] Refactor the project into multiple `.c` and `.h` files
 * [ ] Add a build system such as a `Makefile`
+* [ ] Replace fixed-size storage with dynamic memory
 
 ---
 
@@ -243,6 +351,8 @@ The goal is not only to make the program work, but also to gradually improve:
 * File handling
 * Modular programming
 * Software project structure
+
+The project is being developed incrementally, with each version introducing new concepts and improving the quality of the application.
 
 ---
 
