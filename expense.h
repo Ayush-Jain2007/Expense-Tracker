@@ -30,5 +30,6 @@ void viewAllExpenses(void);
 void spendSummary(void);
 void viewExpenseById(void);
 void deleteExpenseById(void);
+void editExpenseById(void);
 
 #endif

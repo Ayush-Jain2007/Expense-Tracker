@@ -8,7 +8,7 @@ The project is being developed incrementally to practice core C programming conc
 
 ## Current Version
 
-**Version 1.5 — Delete Expense by ID**
+**Version 1.5 — Expense Management**
 
 ---
 
@@ -37,6 +37,9 @@ The project is being developed incrementally to practice core C programming conc
 * Validate numeric input
 * Validate expense amounts
 * Validate dates, including leap years
+* Search for an expense by ID
+* Edit an existing expense by ID
+* Delete an expense by ID
 * Save expenses to a binary file
 * Load previously saved expenses when the program starts
 * Supports up to **100 expenses**
@@ -438,14 +441,14 @@ This project uses several important C programming concepts:
 * Handle non-existent expense IDs
 * Create reusable `findExpenseById()` function
 
-### Version 1.5 — Delete Expense by ID
+### Version 1.5 — Expense Management
 
-* Delete an expense using its ID
-* Reuse `findExpenseById()` to locate expenses
-* Shift remaining expenses after deletion
-* Decrease the total expense count
-* Save the updated expense data to the binary file
-* Handle non-existent expense IDs
+* Edit an existing expense by ID
+* Delete an expense by ID
+* Validate edited expense amounts
+* Validate edited dates before updating
+* Prevent invalid edits from modifying existing data
+* Save edited and deleted expenses to the binary file
 
 ---
 
@@ -453,7 +456,6 @@ This project uses several important C programming concepts:
 
 * Maximum of 100 expenses
 * Expenses are stored in a binary file
-* No edit functionality
 * No search by description
 * No category filtering
 * No date filtering
@@ -471,7 +473,7 @@ This project uses several important C programming concepts:
 * [x] Refactor the project into multiple `.c` and `.h` files
 * [x] Search for an expense by ID
 * [x] Delete an expense by ID
-* [ ] Edit an existing expense
+* [x] Edit an existing expense
 * [ ] Search expenses by description
 * [ ] Filter expenses by category
 * [ ] Filter expenses by date

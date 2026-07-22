@@ -17,9 +17,10 @@ int main()
         printf("  [3] View Total Spending Summary\n");
         printf("  [4] Search Expense By ID\n");
         printf("  [5] Delete Expense By ID\n");
-        printf("  [6] Exit Application\n");
+        printf("  [6] Edit Expense By ID\n");
+        printf("  [7] Exit Application\n");
         printf("\n-------------------------------------------------------------------------------\n");
-        printf("Enter your choice (1-6): ");
+        printf("Enter your choice (1-7): ");
 
         if (scanf("%d", &choice) != 1)
         {
@@ -70,15 +71,19 @@ int main()
             break;
 
         case 6:
+            editExpenseById();
+            break;
+
+        case 7:
             printf("Exiting...\n");
             break;
 
         default:
-            printf("Enter a number between 1 and 6.\n");
+            printf("Enter a number between 1 and 7.\n");
             break;
         }
 
-    } while (choice != 6);
+    } while (choice != 7);
 
     return 0;
 }

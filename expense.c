@@ -28,6 +28,7 @@ int isValidDate(int day, int month, int year){
     }
     if (day < 1 || day > daysInMonth[month-1])
     {
+        printf("Invalid day for the selected month!\n");
         return 0;
     }
     
@@ -246,4 +247,100 @@ void deleteExpenseById(){
     saveExpenses();
 
     printf("Expense Deleted Successfully!\n");
+}
+
+void editExpenseById(void)
+{
+    int id, day, month, year;
+    float amount; 
+
+    if (count == 0)
+    {
+        printf("No expenses to edit.\n");
+        return;
+    }
+
+    printf("Enter ID to edit: ");
+
+    if (scanf("%d", &id) != 1)
+    {
+        printf("Invalid ID!\n");
+
+        while (getchar() != '\n')
+            ;
+
+        return;
+    }
+
+    int index = findExpenseById(id);
+
+    if (index == -1)
+    {
+        printf("Expense with ID %d not found!\n", id);
+        return;
+    }
+    else
+    {
+        while (getchar() != '\n');
+        printf("Enter new Description: ");
+        fgets(expenses[index].description, 50, stdin);
+        expenses[index].description[strcspn(expenses[index].description, "\n")] = '\0';
+        
+        printf("Enter new Category: ");
+        fgets(expenses[index].category, 50, stdin);
+        expenses[index].category[strcspn(expenses[index].category, "\n")] = '\0';
+
+        printf("Enter new Amount: ");
+        if (scanf("%f", &amount) != 1)
+        {
+            printf("Invalid Amount!\n");
+            return;
+        }
+        if (amount <= 0)
+        {
+            printf("Amount should be greater than 0.\n");
+            return;
+        }
+        
+        printf("Enter Day: ");
+        if (scanf("%d", &day) != 1)
+        {
+            printf("Invalid Date!\n");
+            while (getchar() != '\n')
+                ;
+            return;
+        }
+
+        printf("Enter Month: ");
+        if (scanf("%d", &month) != 1)
+        {
+            printf("Invalid Month!\n");
+            while (getchar() != '\n')
+                ;
+            return;
+        }
+
+        printf("Enter year: ");
+        if (scanf("%d", &year) != 1)
+        {
+            printf("Invalid Year!\n");
+            while (getchar() != '\n')
+                ;
+            return;
+        }
+
+        if (!isValidDate(day, month, year))
+        {
+            printf("Invalid Date!\n");
+            return;
+        }
+        expenses[index].amount = amount;
+        expenses[index].date.day = day;
+        expenses[index].date.month = month;
+        expenses[index].date.year = year;
+    }
+    
+    saveExpenses();
+
+    printf("Expenses Updated Successfully!\n");
 }
