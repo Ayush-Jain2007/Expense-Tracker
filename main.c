@@ -23,9 +23,11 @@ struct Expense
 struct Expense expenses[MAX_EXPENSES];
 
 void addNewExpenses();
-void addNewExpenses(){
+void addNewExpenses()
+{
     // Removing leftover \n
-    while(getchar() != '\n');
+    while (getchar() != '\n')
+        ;
 
     // Setting id
     expenses[count].id = count + 1920;
@@ -44,39 +46,66 @@ void addNewExpenses(){
     printf("Enter Amount: ");
     if (scanf("%f", &expenses[count].amount) != 1)
     {
-        printf("Ivalid Quantity!\n");
-        while(getchar() != '\n');
+        printf("Invalid Amount!\n");
+        while (getchar() != '\n')
+            ;
         return;
     }
-    
+    if (expenses[count].amount <= 0)
+    {
+        printf("Amount must be greater than 0!\n");
+        return;
+    }
+
     // Get Date
     printf("Enter Day: ");
     if (scanf("%d", &expenses[count].date.day) != 1)
     {
-        printf("Ivalid Date!\n");
-        while(getchar() != '\n');
+        printf("Invalid Date!\n");
+        while (getchar() != '\n')
+            ;
         return;
     }
+    if (expenses[count].date.day < 1 || expenses[count].date.day > 31)
+    {
+        printf("Day must be between 1 and 31!\n");
+        return;
+    }
+
     printf("Enter Month: ");
     if (scanf("%d", &expenses[count].date.month) != 1)
     {
-        printf("Ivalid Date!\n");
-        while(getchar() != '\n');
+        printf("Invalid Month!\n");
+        while (getchar() != '\n')
+            ;
         return;
     }
+    if (expenses[count].date.month < 1 || expenses[count].date.month > 12)
+    {
+        printf("Month must be between 1 and 12!\n");
+        return;
+    }
+
     printf("Enter year: ");
     if (scanf("%d", &expenses[count].date.year) != 1)
     {
-        printf("Ivalid Date!\n");
-        while(getchar() != '\n');
+        printf("Invalid Year!\n");
+        while (getchar() != '\n')
+            ;
+        return;
+    }
+    if (expenses[count].date.year < 1 || expenses[count].date.year > 3000)
+    {
+        printf("Year must be between 1 and 3000!\n");
         return;
     }
 
-    count ++;
+    count++;
 }
 
 void viewAllExpenses();
-void viewAllExpenses(){
+void viewAllExpenses()
+{
     printf("===============================================================================\n");
     printf("                                  ALL EXPENSES\n");
     printf("===============================================================================\n");
@@ -85,21 +114,22 @@ void viewAllExpenses(){
 
     for (int i = 0; i < count; i++)
     {
-        printf("%-6d | %02d/%02d/%-4d | %-15s | %-25s | $%-9.2f\n", 
-        expenses[i].id, 
-        expenses[i].date.day, expenses[i].date.month, expenses[i].date.year,
-        expenses[i].category, 
-        expenses[i].description, 
-        expenses[i].amount);
+        printf("%-6d | %02d/%02d/%-4d | %-15s | %-25s | $%-9.2f\n",
+               expenses[i].id,
+               expenses[i].date.day, expenses[i].date.month, expenses[i].date.year,
+               expenses[i].category,
+               expenses[i].description,
+               expenses[i].amount);
     }
     printf("-------------------------------------------------------------------------------\n");
 }
 
 void spendSummary();
-void spendSummary(){
+void spendSummary()
+{
     float total_spent = 0, average_cost = 0;
     int max_index = 0, min_index = 0;
-    
+
     for (int i = 0; i < count; i++)
     {
         total_spent += expenses[i].amount;
@@ -112,25 +142,25 @@ void spendSummary(){
             min_index = i;
         }
     }
-    
 
-    average_cost = (float)total_spent/count ;
+    average_cost = (float)total_spent / count;
     printf("==================================================\n");
     printf("                FINANCIAL OVERVIEW\n");
     printf("==================================================\n\n");
     printf("  +----------------------------------------------+\n");
-    
+
     printf("  |  TOTAL SPENT :   %10.2f                     |\n", total_spent);
     printf("  |  TOTAL ITEMS :   %10d                     |\n", count);
     printf("  |  AVERAGE COST:   %10.2f/item                |\n", average_cost);
-    
+
     printf("  +----------------------------------------------+\n");
     printf("\n  [!] Largest Expense :  %-5.2f (%s)\n", expenses[max_index].amount, expenses[max_index].description);
-    printf("  [*] Smallest Expense:  %-5.2f (%s)\n", expenses[min_index].amount, expenses[min_index].description);  
+    printf("  [*] Smallest Expense:  %-5.2f (%s)\n", expenses[min_index].amount, expenses[min_index].description);
     printf("\n==================================================\n");
 }
 
-int main() {
+int main()
+{
     int choice;
     do
     {
@@ -147,12 +177,11 @@ int main() {
         if (scanf("%d", &choice) != 1)
         {
             printf("Invalid input! Please enter a integer.\n");
-            while(getchar() != '\n');
+            while (getchar() != '\n')
+                ;
             choice = 0;
         }
 
-        
-        
         switch (choice)
         {
         case 1:
@@ -161,21 +190,20 @@ int main() {
                 printf("Storage is full!\n");
                 break;
             }
-            
+
             addNewExpenses();
             break;
-        
+
         case 2:
             if (count == 0)
             {
                 printf("No records to be print.\n");
                 break;
             }
-            
 
             viewAllExpenses();
             break;
-                
+
         case 3:
             if (count == 0)
             {
@@ -185,16 +213,16 @@ int main() {
 
             spendSummary();
             break;
-                
+
         case 4:
             printf("Exiting...\n");
             break;
-        
+
         default:
             printf("Enter a number between 1 and 4.\n");
             break;
         }
-        
+
     } while (choice != 4);
 
     return 0;
