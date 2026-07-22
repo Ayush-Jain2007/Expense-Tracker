@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define MAX_EXPENSES 100
@@ -21,6 +22,46 @@ struct Expense
 };
 
 struct Expense expenses[MAX_EXPENSES];
+
+void loadExpenses();
+void loadExpenses(){
+    FILE *ptr = fopen("expenses.dat", "rb");
+
+    if (ptr == NULL)
+    {
+        return;
+    }
+    
+    fread(&count, sizeof(count), 1, ptr);
+
+    if (count < 0 || count > MAX_EXPENSES)
+    {
+        printf("Invalid expense data!\n");
+        count = 0;
+        fclose(ptr);
+        return;
+    }
+    
+    fread(expenses, sizeof(struct Expense), count, ptr);
+
+    fclose(ptr);
+}
+
+void saveExpenses();
+void saveExpenses(){
+    FILE *ptr = fopen("expenses.dat", "wb");
+
+    if (ptr == NULL)
+    {
+        printf("Error opening file!\n");
+        return;
+    }
+    
+    fwrite(&count, sizeof(count), 1, ptr);
+    fwrite(expenses, sizeof(struct Expense), count, ptr);
+
+    fclose(ptr);
+}
 
 int isValidDate(int day, int month, int year);
 int isValidDate(int day, int month, int year){
@@ -121,6 +162,7 @@ void addNewExpenses()
     }
 
     count++;
+    saveExpenses();
 }
 
 void viewAllExpenses();
@@ -181,6 +223,8 @@ void spendSummary()
 
 int main()
 {
+    loadExpenses();
+
     int choice;
     do
     {
