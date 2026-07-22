@@ -22,6 +22,35 @@ struct Expense
 
 struct Expense expenses[MAX_EXPENSES];
 
+int isValidDate(int day, int month, int year);
+int isValidDate(int day, int month, int year){
+    int daysInMonth[] = {
+        31, 28, 31, 30,
+        31, 30, 31, 31,
+        30, 31, 30, 31
+    };
+    if (day < 1 || day > 31)
+    {
+        printf("Day must be between 1 and 31!\n");
+        return 0;
+    }
+    if (month < 1 || month > 12)
+    {
+        printf("Month must be between 1 and 12!\n");
+        return 0;
+    }
+    if ((year % 400 == 0) || (year % 4 == 0 && year % 100 != 0))
+    {
+        daysInMonth[1] = 29;
+    }
+    if (day < 1 || day > daysInMonth[month-1])
+    {
+        return 0;
+    }
+    
+    return 1;
+}
+
 void addNewExpenses();
 void addNewExpenses()
 {
@@ -66,11 +95,6 @@ void addNewExpenses()
             ;
         return;
     }
-    if (expenses[count].date.day < 1 || expenses[count].date.day > 31)
-    {
-        printf("Day must be between 1 and 31!\n");
-        return;
-    }
 
     printf("Enter Month: ");
     if (scanf("%d", &expenses[count].date.month) != 1)
@@ -78,11 +102,6 @@ void addNewExpenses()
         printf("Invalid Month!\n");
         while (getchar() != '\n')
             ;
-        return;
-    }
-    if (expenses[count].date.month < 1 || expenses[count].date.month > 12)
-    {
-        printf("Month must be between 1 and 12!\n");
         return;
     }
 
@@ -94,9 +113,10 @@ void addNewExpenses()
             ;
         return;
     }
-    if (expenses[count].date.year < 1 || expenses[count].date.year > 3000)
+
+    if (!isValidDate(expenses[count].date.day, expenses[count].date.month, expenses[count].date.year))
     {
-        printf("Year must be between 1 and 3000!\n");
+        printf("Invalid Date!\n");
         return;
     }
 
