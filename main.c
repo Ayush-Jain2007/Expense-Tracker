@@ -6,7 +6,7 @@ int main()
 {
     loadExpenses();
 
-    int choice;
+    int choice, filter_choice;
     do
     {
         printf("\n===============================================================================\n");
@@ -14,56 +14,38 @@ int main()
         printf("===============================================================================\n");
         printf("\n  [1] Add New Expense\n");
         printf("  [2] View All Expenses\n");
-        printf("  [3] View Total Spending Summary\n");
-        printf("  [4] Search Expense By ID\n");
-        printf("  [5] Delete Expense By ID\n");
-        printf("  [6] Edit Expense By ID\n");
-        printf("  [7] Exit Application\n");
+        printf("  [3] View Expense By ID\n");
+        printf("  [4] Edit Expense\n");
+        printf("  [5] Delete Expense\n");
+        printf("  [6] Filter Expense\n");
+        printf("  [7] View Total Spending Summary\n");
+        printf("  [8] Exit Application\n");
         printf("\n-------------------------------------------------------------------------------\n");
-        printf("Enter your choice (1-7): ");
+        printf("Enter your choice (1-8): ");
 
         if (scanf("%d", &choice) != 1)
         {
             printf("Invalid input! Please enter a integer.\n");
-            while (getchar() != '\n')
-                ;
+            clearInputBuffer();
             choice = 0;
         }
 
         switch (choice)
         {
         case 1:
-            if (count >= MAX_EXPENSES)
-            {
-                printf("Storage is full!\n");
-                break;
-            }
-
             addNewExpense();
             break;
 
         case 2:
-            if (count == 0)
-            {
-                printf("No records to be print.\n");
-                break;
-            }
-
             viewAllExpenses();
             break;
 
         case 3:
-            if (count == 0)
-            {
-                printf("No records to be Calculated.\n");
-                break;
-            }
-
-            spendSummary();
+            viewExpenseById();
             break;
 
         case 4:
-            viewExpenseById();
+            editExpenseById();
             break;
 
         case 5:
@@ -71,19 +53,57 @@ int main()
             break;
 
         case 6:
-            editExpenseById();
+            printf("\n\n===============================================================================\n");
+            printf("                                FILTER EXPENSE\n");
+            printf("===============================================================================\n");
+            printf("\n  [1] Filter Expense By Category\n");
+            printf("  [2] Filter Expense By Date\n");
+            printf("  [3] Return\n");
+            printf("\n-------------------------------------------------------------------------------\n");
+            printf("Enter your choice (1-3): ");
+            
+            if (scanf("%d", &filter_choice) != 1)
+            {
+                printf("Invalid input! Please enter a integer.\n");
+                clearInputBuffer();
+                filter_choice = 0;
+            }
+
+            switch (filter_choice)
+            {
+            case 1:
+                filterExpensesByCategory();
+                break;
+            
+            case 2:
+                filterExpensesByDate();
+                break;
+            
+            case 3:
+                printf("Returning...\n");
+                break;
+            
+            default:
+                printf("Please enter between 1 and 3!\n");
+                break;
+            }
+
             break;
 
         case 7:
+            spendSummary();
+            break;
+
+        case 8:
             printf("Exiting...\n");
             break;
 
         default:
-            printf("Enter a number between 1 and 7.\n");
+            printf("Enter a number between 1 and 8.\n");
             break;
         }
 
-    } while (choice != 7);
+    } while (choice != 8);
 
     return 0;
 }

@@ -6,12 +6,12 @@
 int count = 0;
 struct Expense expenses[MAX_EXPENSES];
 
-int isValidDate(int day, int month, int year){
+int isValidDate(int day, int month, int year)
+{
     int daysInMonth[] = {
         31, 28, 31, 30,
         31, 30, 31, 31,
-        30, 31, 30, 31
-    };
+        30, 31, 30, 31};
     if (day < 1 || day > 31)
     {
         printf("Day must be between 1 and 31!\n");
@@ -26,16 +26,17 @@ int isValidDate(int day, int month, int year){
     {
         daysInMonth[1] = 29;
     }
-    if (day < 1 || day > daysInMonth[month-1])
+    if (day < 1 || day > daysInMonth[month - 1])
     {
         printf("Invalid day for the selected month!\n");
         return 0;
     }
-    
+
     return 1;
 }
 
-int findExpenseById(int id){
+int findExpenseById(int id)
+{
     for (int i = 0; i < count; i++)
     {
         if (id == expenses[i].id)
@@ -45,12 +46,25 @@ int findExpenseById(int id){
     }
     return -1;
 }
+void clearInputBuffer()
+{
+    int character;
+
+    while ((character = getchar()) != '\n' && character != EOF)
+        ;
+}
 
 void addNewExpense()
 {
+    if (count >= MAX_EXPENSES)
+    {
+        printf("Storage is full!\n");
+        return;
+    }
+
+
     // Removing leftover \n
-    while (getchar() != '\n')
-        ;
+    clearInputBuffer();
 
     // Setting id
     expenses[count].id = count + 1920;
@@ -70,8 +84,7 @@ void addNewExpense()
     if (scanf("%f", &expenses[count].amount) != 1)
     {
         printf("Invalid Amount!\n");
-        while (getchar() != '\n')
-            ;
+        clearInputBuffer();
         return;
     }
     if (expenses[count].amount <= 0)
@@ -85,8 +98,7 @@ void addNewExpense()
     if (scanf("%d", &expenses[count].date.day) != 1)
     {
         printf("Invalid Date!\n");
-        while (getchar() != '\n')
-            ;
+        clearInputBuffer();
         return;
     }
 
@@ -94,8 +106,7 @@ void addNewExpense()
     if (scanf("%d", &expenses[count].date.month) != 1)
     {
         printf("Invalid Month!\n");
-        while (getchar() != '\n')
-            ;
+        clearInputBuffer();
         return;
     }
 
@@ -103,8 +114,7 @@ void addNewExpense()
     if (scanf("%d", &expenses[count].date.year) != 1)
     {
         printf("Invalid Year!\n");
-        while (getchar() != '\n')
-            ;
+        clearInputBuffer();
         return;
     }
 
@@ -120,6 +130,11 @@ void addNewExpense()
 
 void viewAllExpenses()
 {
+    if (count == 0)
+    {
+        printf("No records to be print.\n");
+        return;
+    }
     printf("===============================================================================\n");
     printf("                                  ALL EXPENSES\n");
     printf("===============================================================================\n");
@@ -143,6 +158,12 @@ void viewAllExpenses()
 
 void spendSummary()
 {
+    if (count == 0)
+    {
+        printf("No records to be Calculated.\n");
+        return;
+    }
+
     float total_spent = 0, average_cost = 0;
     int max_index = 0, min_index = 0;
 
@@ -178,7 +199,8 @@ void spendSummary()
     getchar();
 }
 
-void viewExpenseById(){
+void viewExpenseById()
+{
     int id;
 
     printf("\nEnter ID: ");
@@ -211,10 +233,10 @@ void viewExpenseById(){
         getchar();
         getchar();
     }
-    
 }
 
-void deleteExpenseById(){
+void deleteExpenseById()
+{
     int id;
 
     if (count == 0)
@@ -237,9 +259,9 @@ void deleteExpenseById(){
     }
     else
     {
-        for (int j = index; j < (count-1); j++)
+        for (int j = index; j < (count - 1); j++)
         {
-            expenses[j] = expenses[j+1];
+            expenses[j] = expenses[j + 1];
         }
     }
     count--;
@@ -252,7 +274,7 @@ void deleteExpenseById(){
 void editExpenseById(void)
 {
     int id, day, month, year;
-    float amount; 
+    float amount;
 
     if (count == 0)
     {
@@ -266,9 +288,7 @@ void editExpenseById(void)
     {
         printf("Invalid ID!\n");
 
-        while (getchar() != '\n')
-            ;
-
+        clearInputBuffer();
         return;
     }
 
@@ -281,11 +301,11 @@ void editExpenseById(void)
     }
     else
     {
-        while (getchar() != '\n');
+        clearInputBuffer();
         printf("Enter new Description: ");
         fgets(expenses[index].description, 50, stdin);
         expenses[index].description[strcspn(expenses[index].description, "\n")] = '\0';
-        
+
         printf("Enter new Category: ");
         fgets(expenses[index].category, 50, stdin);
         expenses[index].category[strcspn(expenses[index].category, "\n")] = '\0';
@@ -301,13 +321,12 @@ void editExpenseById(void)
             printf("Amount should be greater than 0.\n");
             return;
         }
-        
+
         printf("Enter Day: ");
         if (scanf("%d", &day) != 1)
         {
             printf("Invalid Date!\n");
-            while (getchar() != '\n')
-                ;
+            clearInputBuffer();
             return;
         }
 
@@ -315,8 +334,7 @@ void editExpenseById(void)
         if (scanf("%d", &month) != 1)
         {
             printf("Invalid Month!\n");
-            while (getchar() != '\n')
-                ;
+            clearInputBuffer();
             return;
         }
 
@@ -324,8 +342,7 @@ void editExpenseById(void)
         if (scanf("%d", &year) != 1)
         {
             printf("Invalid Year!\n");
-            while (getchar() != '\n')
-                ;
+            clearInputBuffer();
             return;
         }
 
@@ -339,8 +356,110 @@ void editExpenseById(void)
         expenses[index].date.month = month;
         expenses[index].date.year = year;
     }
-    
+
     saveExpenses();
 
     printf("Expenses Updated Successfully!\n");
+}
+
+void filterExpensesByCategory()
+{
+    char input_category[50];
+    int found = 0;
+
+    if (count == 0)
+    {
+        printf("No category to be filtered.\n");
+        return;
+    }
+
+    printf("===============================================================================\n");
+    printf("                          FILTER EXPENSE BY CATEGORY\n");
+    printf("===============================================================================\n");
+    printf("\nEnter Category: ");
+    clearInputBuffer();
+
+    fgets(input_category, 50, stdin);
+    input_category[strcspn(input_category, "\n")] = '\0';
+
+    for (int i = 0; i < count; i++)
+    {
+        if (strcmp(input_category, expenses[i].category) == 0)
+        {
+            printf("%-6d | %02d/%02d/%-4d | %-15s | %-25s | $%-9.2f\n",
+                   expenses[i].id,
+                   expenses[i].date.day, expenses[i].date.month, expenses[i].date.year,
+                   expenses[i].category,
+                   expenses[i].description,
+                   expenses[i].amount);
+            found++;
+        }
+    }
+    if (found == 0)
+    {
+        printf("\nNo Expense found with those category!\n");
+        return;
+    }
+    printf("-------------------------------------------------------------------------------\n");
+    printf("\nTotal %d expenses found!\n", found);
+}
+
+void filterExpensesByDate()
+{
+    int month, year, found = 0;
+    if (count == 0)
+    {
+        printf("No expenses to filter.\n");
+        return;
+    }
+
+    printf("===============================================================================\n");
+    printf("                            FILTER EXPENSE BY DATE\n");
+    printf("===============================================================================\n");
+    printf("Enter Month: ");
+    if (scanf("%d", &month) != 1)
+    {
+        printf("Invalid Month!\n");
+        clearInputBuffer();
+        return;
+    }
+    if (month < 1 || month > 12)
+    {
+        printf("Month must be between 1 and 12!\n");
+        return;
+    }
+
+    printf("Enter Year: ");
+    if (scanf("%d", &year) != 1)
+    {
+        printf("Invalid Year!\n");
+        clearInputBuffer();
+        return;
+    }
+    if (year < 1 || year > 3000)
+    {
+        printf("Year must be between 1 and 3000!\n");
+        return;
+    }
+
+    for (int i = 0; i < count; i++)
+    {
+        if (month == expenses[i].date.month && year == expenses[i].date.year)
+        {
+            printf("%-6d | %02d/%02d/%-4d | %-15s | %-25s | $%-9.2f\n",
+                   expenses[i].id,
+                   expenses[i].date.day, expenses[i].date.month, expenses[i].date.year,
+                   expenses[i].category,
+                   expenses[i].description,
+                   expenses[i].amount);
+            found++;
+        }
+    }
+    if (found == 0)
+    {
+        printf("\nNo Expense found with those Date!\n");
+        return;
+    }
+    printf("-------------------------------------------------------------------------------\n");
+    printf("\nTotal %d expenses found!\n", found);
 }
