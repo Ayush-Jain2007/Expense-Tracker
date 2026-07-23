@@ -6,7 +6,7 @@ int main()
 {
     loadExpenses();
 
-    int choice, filter_choice;
+    int choice, filter_choice, sort_choice;
     do
     {
         printf("\n===============================================================================\n");
@@ -18,10 +18,11 @@ int main()
         printf("  [4] Edit Expense\n");
         printf("  [5] Delete Expense\n");
         printf("  [6] Filter Expense\n");
-        printf("  [7] View Total Spending Summary\n");
-        printf("  [8] Exit Application\n");
+        printf("  [7] Sort Expenses\n");
+        printf("  [8] View Total Spending Summary\n");
+        printf("  [9] Exit Application\n");
         printf("\n-------------------------------------------------------------------------------\n");
-        printf("Enter your choice (1-8): ");
+        printf("Enter your choice (1-9): ");
 
         if (scanf("%d", &choice) != 1)
         {
@@ -53,15 +54,21 @@ int main()
             break;
 
         case 6:
+            if (count == 0)
+            {
+                printf("No expense to be Filtered.\n");
+                break;
+            }
+
             printf("\n\n===============================================================================\n");
-            printf("                                FILTER EXPENSE\n");
+            printf("                                FILTER EXPENSES\n");
             printf("===============================================================================\n");
             printf("\n  [1] Filter Expense By Category\n");
             printf("  [2] Filter Expense By Date\n");
             printf("  [3] Return\n");
             printf("\n-------------------------------------------------------------------------------\n");
             printf("Enter your choice (1-3): ");
-            
+
             if (scanf("%d", &filter_choice) != 1)
             {
                 printf("Invalid input! Please enter a integer.\n");
@@ -74,36 +81,89 @@ int main()
             case 1:
                 filterExpensesByCategory();
                 break;
-            
+
             case 2:
                 filterExpensesByDate();
                 break;
-            
+
             case 3:
                 printf("Returning...\n");
                 break;
-            
+
             default:
-                printf("Please enter between 1 and 3!\n");
+                printf("Please enter between 1 and 3.\n");
                 break;
             }
 
             break;
 
         case 7:
-            spendSummary();
+            if (count == 0)
+            {
+                printf("No expense to be sort.\n");
+                break;
+            }
+
+            printf("\n\n===============================================================================\n");
+            printf("                                  SORT EXPENSES\n");
+            printf("===============================================================================\n");
+            printf("\n  [1] Sort By Amount (Low to High)\n");
+            printf("  [2] Sort By Amount (High to Low)\n");
+            printf("  [3] Sort By Date (Oldest to Newest)\n");
+            printf("  [4] Sort By Date (Newest to Oldest)\n");
+            printf("  [5] Return\n");
+            printf("\n-------------------------------------------------------------------------------\n");
+            printf("Enter your choice (1-5): ");
+
+            if (scanf("%d", &sort_choice) != 1)
+            {
+                printf("Invalid input! Please enter a integer.\n");
+                clearInputBuffer();
+                sort_choice = 0;
+            }
+
+            switch (sort_choice)
+            {
+            case 1:
+                sortExpensesByAmount(1);
+                break;
+
+            case 2:
+                sortExpensesByAmount(0);
+                break;
+
+            case 3:
+                sortExpensesByDate(1);
+                break;
+
+            case 4:
+                sortExpensesByDate(0);
+                break;
+
+            case 5:
+                printf("Returning...\n");
+                break;
+
+            default:
+                printf("Please enter between 1 and 5.\n");
+                break;
+            }
             break;
 
         case 8:
+            spendSummary();
+            break;
+
+        case 9:
             printf("Exiting...\n");
             break;
 
         default:
-            printf("Enter a number between 1 and 8.\n");
+            printf("Enter a number between 1 and 9.\n");
             break;
         }
 
-    } while (choice != 8);
+    } while (choice != 9);
 
     return 0;
 }

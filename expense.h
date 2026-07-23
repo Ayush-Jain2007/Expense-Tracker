@@ -34,5 +34,7 @@ void deleteExpenseById(void);
 void editExpenseById(void);
 void filterExpensesByCategory(void);
 void filterExpensesByDate(void);
+void sortExpensesByAmount(int ascending);
+void sortExpensesByDate(int ascending);
 
 #endif

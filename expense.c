@@ -463,3 +463,89 @@ void filterExpensesByDate()
     printf("-------------------------------------------------------------------------------\n");
     printf("\nTotal %d expenses found!\n", found);
 }
+
+void sortExpensesByAmount(int ascending){
+    struct Expense temp;
+
+    for (int i = 0; i < count-1; i++)
+    {
+        for (int j = i+1; j < count; j++)
+        {
+            if (ascending && expenses[i].amount > expenses[j].amount)
+            {
+                temp = expenses[i];
+                expenses[i] = expenses[j];
+                expenses[j] = temp;
+            }
+            else if (!ascending && expenses[i].amount < expenses[j].amount)
+            {
+                temp = expenses[i];
+                expenses[i] = expenses[j];
+                expenses[j] = temp;
+            }
+        }
+    }
+
+    saveExpenses();
+    printf("Expenses sorted successfully!\n");
+}
+
+void sortExpensesByDate(int ascending){
+    struct Expense temp;
+
+    for (int i = 0; i < count-1; i++)
+    {
+        for (int j = i+1; j < count; j++)
+        {
+            int swap = 0;
+
+            if (ascending)
+            {
+                if (expenses[i].date.year > expenses[j].date.year)
+                {
+                    swap = 1;
+                }
+                else if (expenses[i].date.year == expenses[j].date.year && 
+                         expenses[i].date.month > expenses[j].date.month )
+                {
+                    swap = 1;
+                }
+                else if (expenses[i].date.year == expenses[j].date.year && 
+                         expenses[i].date.month == expenses[j].date.month && 
+                         expenses[i].date.day > expenses[j].date.day)
+                {
+                    swap = 1;
+                }
+            }
+
+            else
+            {
+                if (expenses[i].date.year < expenses[j].date.year)
+                {
+                    swap = 1;
+                }
+                else if (expenses[i].date.year == expenses[j].date.year && 
+                         expenses[i].date.month < expenses[j].date.month )
+                {
+                    swap = 1;
+                }
+                else if (expenses[i].date.year == expenses[j].date.year && 
+                         expenses[i].date.month == expenses[j].date.month && 
+                         expenses[i].date.day < expenses[j].date.day)
+                {
+                    swap = 1;
+                }
+            }
+            
+            if (swap)
+            {
+                temp = expenses[i];
+                expenses[i] = expenses[j];
+                expenses[j] = temp;
+            }
+        }
+    }
+    
+    saveExpenses();
+    printf("Expenses sorted successfully!\n");
+}
