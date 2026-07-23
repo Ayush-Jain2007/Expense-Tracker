@@ -1,6 +1,9 @@
+Here is the **fully updated README.md** for your current project.
+
+````markdown
 # Personal Expense Tracker
 
-A console-based personal expense tracker written in **C**. This project allows users to record, view, manage, and analyze their daily expenses through a simple terminal interface.
+A console-based personal expense tracker written in **C**. This project allows users to record, view, edit, delete, filter, and analyze their daily expenses through a simple terminal interface.
 
 The project is being developed incrementally to practice core C programming concepts such as structures, arrays, functions, file handling, input validation, modular programming, and project organization.
 
@@ -8,7 +11,7 @@ The project is being developed incrementally to practice core C programming conc
 
 ## Current Version
 
-**Version 1.5 — Expense Management**
+**Version 1.6 — Expense Filtering**
 
 ---
 
@@ -17,7 +20,6 @@ The project is being developed incrementally to practice core C programming conc
 * Add new expenses
 * Automatically generate expense IDs
 * Store:
-
   * Expense description
   * Expense category
   * Amount
@@ -25,10 +27,12 @@ The project is being developed incrementally to practice core C programming conc
 * View all recorded expenses in a formatted table
 * Search for an expense by ID
 * Display a single expense by ID
-* Delete an expense by ID
+* Edit existing expenses
+* Delete expenses by ID
+* Filter expenses by category
+* Filter expenses by month and year
 * Calculate a spending summary
 * Display:
-
   * Total amount spent
   * Total number of expenses
   * Average expense amount
@@ -37,9 +41,6 @@ The project is being developed incrementally to practice core C programming conc
 * Validate numeric input
 * Validate expense amounts
 * Validate dates, including leap years
-* Search for an expense by ID
-* Edit an existing expense by ID
-* Delete an expense by ID
 * Save expenses to a binary file
 * Load previously saved expenses when the program starts
 * Supports up to **100 expenses**
@@ -50,8 +51,8 @@ The project is being developed incrementally to practice core C programming conc
 
 * **Language:** C
 * **Standard:** C99
+* **Compiler:** GCC
 * **Libraries:**
-
   * `stdio.h`
   * `string.h`
 
@@ -67,12 +68,12 @@ expense-tracker/
 ├── expense.h
 ├── file.c
 ├── file.h
-├── .gitignore
-├── README.md
-│
-├── expenses.dat      # Generated locally, ignored by Git
-└── output/           # Build output, ignored by Git
-```
+├── expenses.dat
+├── output/
+└── README.md
+````
+
+> `expenses.dat` and the `output/` directory are generated locally and are ignored by Git.
 
 ### File Responsibilities
 
@@ -81,6 +82,7 @@ expense-tracker/
 Contains:
 
 * Main menu
+* Filter submenu
 * User input for menu choices
 * Program flow
 
@@ -92,7 +94,10 @@ Contains:
 * Expense creation
 * Expense display
 * Expense lookup
+* Expense editing
 * Expense deletion
+* Category filtering
+* Date filtering
 * Date validation
 * Spending summary
 
@@ -104,7 +109,7 @@ Contains:
 * `Expense` structure
 * Shared constants
 * Global variable declarations
-* Expense function prototypes
+* Function prototypes
 
 #### `file.c`
 
@@ -162,7 +167,7 @@ expenses.dat
 
 When the program starts, previously saved expenses are loaded from the file.
 
-When an expense is added or deleted, the updated expense data is saved automatically.
+When an expense is added, edited, or deleted, the updated expense data is saved automatically.
 
 ```text
 Program starts
@@ -171,7 +176,7 @@ Load expenses.dat
       ↓
 Use application
       ↓
-Add or delete expense
+Add / Edit / Delete expense
       ↓
 Save expenses.dat
 ```
@@ -191,7 +196,7 @@ gcc main.c expense.c file.c -o output/expense_tracker
 For additional compiler warnings:
 
 ```bash
-gcc -Wall -Wextra -g main.c expense.c file.c -o output/expense_tracker
+gcc -Wall -Wextra -g3 main.c expense.c file.c -o output/expense_tracker
 ```
 
 ---
@@ -224,9 +229,11 @@ After starting the program, the following menu is displayed:
   [1] Add New Expense
   [2] View All Expenses
   [3] View Expense By ID
-  [4] Delete Expense By ID
-  [5] View Total Spending Summary
-  [6] Exit Application
+  [4] Edit Expense
+  [5] Delete Expense
+  [6] Filter Expense
+  [7] View Total Spending Summary
+  [8] Exit Application
 ```
 
 ---
@@ -273,7 +280,7 @@ The matching expense is then displayed.
 If the ID does not exist:
 
 ```text
-ID doesn't exist!
+Expense with ID 1920 not found!
 ```
 
 The lookup is implemented using:
@@ -286,32 +293,99 @@ This function searches the expense array and returns the matching array index.
 
 ---
 
-### 4. Delete Expense By ID
+### 4. Edit Expense
 
-Allows the user to delete a specific expense using its ID.
+Allows the user to modify an existing expense using its ID.
+
+The following fields can be updated:
+
+* Description
+* Category
+* Amount
+* Day
+* Month
+* Year
+
+Example:
 
 ```text
-Enter ID: 1920
-Expense deleted successfully!
+Enter ID to edit: 1920
+Enter new Description: Monthly Grocery Shopping
+Enter new Category: Food
+Enter new Amount: 1500.00
+Enter Day: 21
+Enter Month: 7
+Enter Year: 2026
 ```
 
-When an expense is deleted, the remaining expenses are shifted left in the array:
+The updated expense is validated and saved to the binary file.
 
-```text
-Before:
-[Expense A] [Expense B] [Expense C] [Expense D]
-
-Delete Expense B:
-
-After:
-[Expense A] [Expense C] [Expense D]
-```
-
-The updated expense list is then saved to `expenses.dat`.
+The expense ID remains unchanged.
 
 ---
 
-### 5. View Total Spending Summary
+### 5. Delete Expense
+
+Allows the user to delete an expense using its ID.
+
+Example:
+
+```text
+Enter ID: 1920
+```
+
+When an expense is deleted, the remaining expenses are shifted in the array to fill the empty position.
+
+The updated data is then saved to `expenses.dat`.
+
+---
+
+### 6. Filter Expenses
+
+The program provides filtering options:
+
+```text
+===============================================================================
+                                FILTER EXPENSE
+===============================================================================
+
+  [1] Filter Expense By Category
+  [2] Filter Expense By Date
+  [3] Return
+
+-------------------------------------------------------------------------------
+```
+
+#### Filter by Category
+
+The user can enter a category and view all matching expenses.
+
+Example:
+
+```text
+Enter Category: Food
+```
+
+The program displays all expenses belonging to the `Food` category.
+
+#### Filter by Date
+
+Expenses can be filtered by month and year.
+
+Example:
+
+```text
+Enter Month: 7
+Enter Year: 2026
+```
+
+The program displays all expenses recorded during July 2026.
+
+If no matching expenses are found, the program displays an appropriate message.
+
+---
+
+### 7. View Total Spending Summary
 
 Displays financial statistics based on the recorded expenses:
 
@@ -384,6 +458,7 @@ This project uses several important C programming concepts:
 * `fgets()` string input
 * Input buffer cleanup
 * String manipulation using `strcspn()`
+* `strcmp()` string comparison
 * Loops
 * Conditional statements
 * `switch` statements
@@ -397,6 +472,7 @@ This project uses several important C programming concepts:
 * Leap year calculations
 * Array searching
 * Array element shifting
+* Filtering data
 * Basic statistical calculations
 * Formatted output using `printf()`
 
@@ -443,12 +519,19 @@ This project uses several important C programming concepts:
 
 ### Version 1.5 — Expense Management
 
-* Edit an existing expense by ID
+* Edit an existing expense
 * Delete an expense by ID
-* Validate edited expense amounts
-* Validate edited dates before updating
-* Prevent invalid edits from modifying existing data
-* Save edited and deleted expenses to the binary file
+* Preserve expense IDs while editing
+* Shift array elements after deletion
+* Save changes automatically
+
+### Version 1.6 — Expense Filtering
+
+* Filter expenses by category
+* Filter expenses by month and year
+* Display matching expenses
+* Display the number of matching results
+* Validate filter input
 
 ---
 
@@ -457,11 +540,11 @@ This project uses several important C programming concepts:
 * Maximum of 100 expenses
 * Expenses are stored in a binary file
 * No search by description
-* No category filtering
-* No date filtering
 * No sorting functionality
+* No category-wise spending summary
 * The program uses `float` for monetary values
 * Input handling can be further improved
+* Some input logic is repeated across multiple functions
 
 ---
 
@@ -472,16 +555,17 @@ This project uses several important C programming concepts:
 * [x] Add proper date validation
 * [x] Refactor the project into multiple `.c` and `.h` files
 * [x] Search for an expense by ID
-* [x] Delete an expense by ID
 * [x] Edit an existing expense
-* [ ] Search expenses by description
-* [ ] Filter expenses by category
-* [ ] Filter expenses by date
+* [x] Delete an expense
+* [x] Filter expenses by category
+* [x] Filter expenses by date
 * [ ] Sort expenses by amount or date
 * [ ] Generate category-wise spending summaries
 * [ ] Add a build system such as a `Makefile`
 * [ ] Replace fixed-size storage with dynamic memory
 * [ ] Improve monetary value handling using integer cents instead of `float`
+* [ ] Create reusable input utility functions
+* [ ] Improve error handling for file operations
 
 ---
 
@@ -512,3 +596,8 @@ The project is being developed incrementally, with each version introducing new 
 ## License
 
 This project is open-source and available for learning and educational purposes.
+
+```
+
+One small note: your README now correctly describes the project as **v1.6**, but the next feature should probably be **searching expenses by description** or **refactoring repeated input handling into utility functions**.
+```
