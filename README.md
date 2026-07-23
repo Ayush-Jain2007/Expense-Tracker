@@ -1,6 +1,3 @@
-Here is the **fully updated README.md** for your current project.
-
-````markdown
 # Personal Expense Tracker
 
 A console-based personal expense tracker written in **C**. This project allows users to record, view, edit, delete, filter, and analyze their daily expenses through a simple terminal interface.
@@ -11,7 +8,7 @@ The project is being developed incrementally to practice core C programming conc
 
 ## Current Version
 
-**Version 1.6 — Expense Filtering**
+**Version 1.6 — Expense Sorting**
 
 ---
 
@@ -41,6 +38,9 @@ The project is being developed incrementally to practice core C programming conc
 * Validate numeric input
 * Validate expense amounts
 * Validate dates, including leap years
+* Sort expenses by amount
+* Sort expenses by date
+* Sort in ascending or descending order
 * Save expenses to a binary file
 * Load previously saved expenses when the program starts
 * Supports up to **100 expenses**
@@ -232,8 +232,9 @@ After starting the program, the following menu is displayed:
   [4] Edit Expense
   [5] Delete Expense
   [6] Filter Expense
-  [7] View Total Spending Summary
-  [8] Exit Application
+  [7] Sort Expenses
+  [8] View Total Spending Summary
+  [9] Exit Application
 ```
 
 ---
@@ -517,21 +518,20 @@ This project uses several important C programming concepts:
 * Handle non-existent expense IDs
 * Create reusable `findExpenseById()` function
 
-### Version 1.5 — Expense Management
-
-* Edit an existing expense
-* Delete an expense by ID
-* Preserve expense IDs while editing
-* Shift array elements after deletion
-* Save changes automatically
-
-### Version 1.6 — Expense Filtering
+### Version 1.5 — Expense Filtering
 
 * Filter expenses by category
 * Filter expenses by month and year
 * Display matching expenses
-* Display the number of matching results
-* Validate filter input
+* Display the number of matching expenses
+
+### Version 1.6 — Expense Sorting
+
+* Sort expenses by amount
+* Sort expenses by date
+* Support ascending sorting
+* Support descending sorting
+* Save the sorted order to the binary data file
 
 ---
 
@@ -559,7 +559,7 @@ This project uses several important C programming concepts:
 * [x] Delete an expense
 * [x] Filter expenses by category
 * [x] Filter expenses by date
-* [ ] Sort expenses by amount or date
+* [x] Sort expenses by amount or date
 * [ ] Generate category-wise spending summaries
 * [ ] Add a build system such as a `Makefile`
 * [ ] Replace fixed-size storage with dynamic memory
