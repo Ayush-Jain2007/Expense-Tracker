@@ -8,7 +8,7 @@ The project is being developed incrementally to practice core C programming conc
 
 ## Current Version
 
-**Version 1.9 — Reusable Input Handling Utilities**
+**Version 2.0 — ExpenseManager Architecture**
 
 ---
 
@@ -50,6 +50,9 @@ The project is being developed incrementally to practice core C programming conc
 * Integer range validation
 * Safe floating-point input handling
 * Centralized input buffer cleanup
+* Encapsulate expense data inside an `ExpenseManager` structure
+* Pass expense data between modules using structure pointers
+* Reduce reliance on global variables
 * Load previously saved expenses when the program starts
 * Supports up to **100 expenses**
 
@@ -117,9 +120,9 @@ Contains:
 
 * `Date` structure
 * `Expense` structure
+* `ExpenseManager` structure
 * Shared constants
-* Global variable declarations
-* Function prototypes
+* Expense function prototypes
 
 #### `file.c`
 
@@ -177,6 +180,21 @@ struct Date
 ```
 
 This demonstrates the use of **nested structures** in C.
+
+---
+
+## ExpenseManager Architecture
+
+Starting with Version 2.0, expense data is encapsulated inside an
+`ExpenseManager` structure:
+
+```c
+struct ExpenseManager
+{
+    struct Expense expenses[MAX_EXPENSES];
+    int count;
+};
+```
 
 ---
 
@@ -487,6 +505,13 @@ This project uses several important C programming concepts:
 * Centralized input validation
 * Abstraction
 * Defensive input handling
+* Structure pointers
+* Passing structures to functions
+* Passing structures by address
+* Pointer member access using `->`
+* Data encapsulation
+* Reducing global state
+* Manager-style data architecture
 * Data aggregation
 
 ---
@@ -568,6 +593,16 @@ This project uses several important C programming concepts:
 * Centralize input buffer cleanup
 * Reduce duplicated input validation code
 * Improve input handling throughout the application
+
+### Version 2.0 — ExpenseManager Architecture
+
+* Introduced `struct ExpenseManager`
+* Encapsulated the expense array and expense count
+* Removed direct global access to expense data
+* Updated functions to receive an `ExpenseManager` pointer
+* Improved data flow between modules
+* Updated file persistence functions to work with the manager
+* Updated CRUD, filtering, sorting, and summary operations
 
 ---
 

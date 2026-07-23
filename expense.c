@@ -4,9 +4,6 @@
 #include "file.h"
 #include "utils.h"
 
-int count = 0;
-struct Expense expenses[MAX_EXPENSES];
-
 int isValidDate(int day, int month, int year)
 {
     int daysInMonth[] = {
@@ -36,11 +33,11 @@ int isValidDate(int day, int month, int year)
     return 1;
 }
 
-int findExpenseById(int id)
+int findExpenseById(struct ExpenseManager *manager,int id)
 {
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < manager->count; i++)
     {
-        if (id == expenses[i].id)
+        if (id == manager->expenses[i].id)
         {
             return i;
         }
@@ -48,9 +45,9 @@ int findExpenseById(int id)
     return -1;
 }
 
-void addNewExpense()
+void addNewExpense(struct ExpenseManager *manager)
 {
-    if (count >= MAX_EXPENSES)
+    if (manager->count >= MAX_EXPENSES)
     {
         printf("Storage is full!\n");
         return;
@@ -60,45 +57,45 @@ void addNewExpense()
     clearInputBuffer();
 
     // Setting id
-    expenses[count].id = count + 1920;
+    manager->expenses[manager->count].id = manager->count + 1920;
 
     // Get Desription
     printf("Enter Desription: ");
-    fgets(expenses[count].description, 50, stdin);
-    expenses[count].description[strcspn(expenses[count].description, "\n")] = '\0';
+    fgets(manager->expenses[manager->count].description, 50, stdin);
+    manager->expenses[manager->count].description[strcspn(manager->expenses[manager->count].description, "\n")] = '\0';
 
     // Get Category
     printf("Enter Category: ");
-    fgets(expenses[count].category, 50, stdin);
-    expenses[count].category[strcspn(expenses[count].category, "\n")] = '\0';
+    fgets(manager->expenses[manager->count].category, 50, stdin);
+    manager->expenses[manager->count].category[strcspn(manager->expenses[manager->count].category, "\n")] = '\0';
 
     // Get Amount
-    expenses[count].amount = getFloat("Enter Amount: ");
+    manager->expenses[manager->count].amount = getFloat("Enter Amount: ");
 
-    if (expenses[count].amount <= 0)
+    if (manager->expenses[manager->count].amount <= 0)
     {
         printf("Amount must be greater than 0!\n");
         return;
     }
 
     // Get Date
-    expenses[count].date.day = getInt("Enter Day: ");
-    expenses[count].date.month = getInt("Enter Month: ");
-    expenses[count].date.year = getInt("Enter Year: ");
+    manager->expenses[manager->count].date.day = getInt("Enter Day: ");
+    manager->expenses[manager->count].date.month = getInt("Enter Month: ");
+    manager->expenses[manager->count].date.year = getInt("Enter Year: ");
 
-    if (!isValidDate(expenses[count].date.day, expenses[count].date.month, expenses[count].date.year))
+    if (!isValidDate(manager->expenses[manager->count].date.day, manager->expenses[manager->count].date.month, manager->expenses[manager->count].date.year))
     {
         printf("Invalid Date!\n");
         return;
     }
 
-    count++;
-    saveExpenses();
+    manager->count++;
+    saveExpenses(manager);
 }
 
-void viewAllExpenses()
+void viewAllExpenses(struct ExpenseManager *manager)
 {
-    if (count == 0)
+    if (manager->count == 0)
     {
         printf("No records to be print.\n");
         return;
@@ -109,14 +106,16 @@ void viewAllExpenses()
     printf("%-6s | %-10s | %-15s | %-25s | %-10s\n", "ID", "Date", "Category", "Description", "Amount ($)");
     printf("-------------------------------------------------------------------------------\n");
 
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < manager->count; i++)
     {
         printf("%-6d | %02d/%02d/%-4d | %-15s | %-25s | $%-9.2f\n",
-               expenses[i].id,
-               expenses[i].date.day, expenses[i].date.month, expenses[i].date.year,
-               expenses[i].category,
-               expenses[i].description,
-               expenses[i].amount);
+                manager->expenses[i].id,
+                manager->expenses[i].date.day, 
+                manager->expenses[i].date.month,
+                manager->expenses[i].date.year,
+                manager->expenses[i].category,
+                manager->expenses[i].description,
+                manager->expenses[i].amount);
     }
     printf("-------------------------------------------------------------------------------\n");
     printf("Press Enter to continue...");
@@ -124,9 +123,9 @@ void viewAllExpenses()
     getchar();
 }
 
-void spendSummary()
+void spendSummary(struct ExpenseManager *manager)
 {
-    if (count == 0)
+    if (manager->count == 0)
     {
         printf("No records to be Calculated.\n");
         return;
@@ -135,45 +134,45 @@ void spendSummary()
     float total_spent = 0, average_cost = 0;
     int max_index = 0, min_index = 0;
 
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < manager->count; i++)
     {
-        total_spent += expenses[i].amount;
-        if (expenses[i].amount > expenses[max_index].amount)
+        total_spent += manager->expenses[i].amount;
+        if (manager->expenses[i].amount > manager->expenses[max_index].amount)
         {
             max_index = i;
         }
-        if (expenses[i].amount < expenses[min_index].amount)
+        if (manager->expenses[i].amount < manager->expenses[min_index].amount)
         {
             min_index = i;
         }
     }
 
-    average_cost = (float)total_spent / count;
+    average_cost = (float)total_spent / manager->count;
     printf("==================================================\n");
     printf("                FINANCIAL OVERVIEW\n");
     printf("==================================================\n\n");
     printf("  +----------------------------------------------+\n");
 
-    printf("  |  TOTAL SPENT :%8.2f                       |\n", total_spent);
-    printf("  |  TOTAL ITEMS :%6d                         |\n", count);
-    printf("  |  AVERAGE COST:%8.2f/item                  |\n", average_cost);
+    printf("  |  TOTAL SPENT :%10.2f                     |\n", total_spent);
+    printf("  |  TOTAL ITEMS :%6d                         |\n", manager->count);
+    printf("  |  AVERAGE COST:%10.2f/item                |\n", average_cost);
 
     printf("  +----------------------------------------------+\n");
-    printf("\n  [!] Largest Expense :  %-5.2f (%s)\n", expenses[max_index].amount, expenses[max_index].description);
-    printf("  [*] Smallest Expense:  %-5.2f (%s)\n", expenses[min_index].amount, expenses[min_index].description);
+    printf("\n  [!] Largest Expense :  %-5.2f (%s)\n", manager->expenses[max_index].amount, manager->expenses[max_index].description);
+    printf("  [*] Smallest Expense:  %-5.2f (%s)\n", manager->expenses[min_index].amount, manager->expenses[min_index].description);
     printf("\n==================================================\n");
     printf("Press Enter to continue...");
     getchar();
     getchar();
 }
 
-void viewExpenseById()
+void viewExpenseById(struct ExpenseManager *manager)
 {
     int id;
 
     id = getInt("Enter ID: ");
 
-    int index = findExpenseById(id);
+    int index = findExpenseById(manager, id);
     if (index == -1)
     {
         printf("ID doesn't exists!\n");
@@ -187,11 +186,11 @@ void viewExpenseById()
         printf("%-6s | %-10s | %-15s | %-25s | %-10s\n", "ID", "Date", "Category", "Description", "Amount ($)");
         printf("-------------------------------------------------------------------------------\n");
         printf("%-6d | %02d/%02d/%-4d | %-15s | %-25s | $%-9.2f\n",
-               expenses[index].id,
-               expenses[index].date.day, expenses[index].date.month, expenses[index].date.year,
-               expenses[index].category,
-               expenses[index].description,
-               expenses[index].amount);
+               manager->expenses[index].id,
+               manager->expenses[index].date.day, manager->expenses[index].date.month, manager->expenses[index].date.year,
+               manager->expenses[index].category,
+               manager->expenses[index].description,
+               manager->expenses[index].amount);
         printf("-------------------------------------------------------------------------------\n\n");
         printf("Press Enter to continue...");
         getchar();
@@ -199,11 +198,11 @@ void viewExpenseById()
     }
 }
 
-void deleteExpenseById()
+void deleteExpenseById(struct ExpenseManager *manager)
 {
     int id;
 
-    if (count == 0)
+    if (manager->count == 0)
     {
         printf("No Data to be deleted.\n");
         return;
@@ -211,7 +210,7 @@ void deleteExpenseById()
 
     id = getInt("Enter ID: ");
 
-    int index = findExpenseById(id);
+    int index = findExpenseById(manager, id);
     if (index == -1)
     {
         printf("ID doesn't exists!\n");
@@ -219,24 +218,24 @@ void deleteExpenseById()
     }
     else
     {
-        for (int j = index; j < (count - 1); j++)
+        for (int j = index; j < (manager->count - 1); j++)
         {
-            expenses[j] = expenses[j + 1];
+            manager->expenses[j] = manager->expenses[j + 1];
         }
     }
-    count--;
+    manager->count--;
 
-    saveExpenses();
+    saveExpenses(manager);
 
     printf("Expense Deleted Successfully!\n");
 }
 
-void editExpenseById(void)
+void editExpenseById(struct ExpenseManager *manager)
 {
     int id, day, month, year;
     float amount;
 
-    if (count == 0)
+    if (manager->count == 0)
     {
         printf("No expenses to edit.\n");
         return;
@@ -244,7 +243,7 @@ void editExpenseById(void)
 
     id = getInt("Enter ID: ");
 
-    int index = findExpenseById(id);
+    int index = findExpenseById(manager, id);
 
     if (index == -1)
     {
@@ -255,12 +254,12 @@ void editExpenseById(void)
     {
         clearInputBuffer();
         printf("Enter new Description: ");
-        fgets(expenses[index].description, 50, stdin);
-        expenses[index].description[strcspn(expenses[index].description, "\n")] = '\0';
+        fgets(manager->expenses[index].description, 50, stdin);
+        manager->expenses[index].description[strcspn(manager->expenses[index].description, "\n")] = '\0';
 
         printf("Enter new Category: ");
-        fgets(expenses[index].category, 50, stdin);
-        expenses[index].category[strcspn(expenses[index].category, "\n")] = '\0';
+        fgets(manager->expenses[index].category, 50, stdin);
+        manager->expenses[index].category[strcspn(manager->expenses[index].category, "\n")] = '\0';
 
         amount = getFloat("Enter Amount: ");
 
@@ -281,23 +280,23 @@ void editExpenseById(void)
             printf("Invalid Date!\n");
             return;
         }
-        expenses[index].amount = amount;
-        expenses[index].date.day = day;
-        expenses[index].date.month = month;
-        expenses[index].date.year = year;
+        manager->expenses[index].amount = amount;
+        manager->expenses[index].date.day = day;
+        manager->expenses[index].date.month = month;
+        manager->expenses[index].date.year = year;
     }
 
-    saveExpenses();
+    saveExpenses(manager);
 
     printf("Expenses Updated Successfully!\n");
 }
 
-void filterExpensesByCategory()
+void filterExpensesByCategory(struct ExpenseManager *manager)
 {
     char input_category[50];
     int found = 0;
 
-    if (count == 0)
+    if (manager->count == 0)
     {
         printf("No category to be filtered.\n");
         return;
@@ -312,16 +311,16 @@ void filterExpensesByCategory()
     fgets(input_category, 50, stdin);
     input_category[strcspn(input_category, "\n")] = '\0';
 
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < manager->count; i++)
     {
-        if (strcmp(input_category, expenses[i].category) == 0)
+        if (strcmp(input_category, manager->expenses[i].category) == 0)
         {
             printf("%-6d | %02d/%02d/%-4d | %-15s | %-25s | $%-9.2f\n",
-                   expenses[i].id,
-                   expenses[i].date.day, expenses[i].date.month, expenses[i].date.year,
-                   expenses[i].category,
-                   expenses[i].description,
-                   expenses[i].amount);
+                   manager->expenses[i].id,
+                   manager->expenses[i].date.day, manager->expenses[i].date.month, manager->expenses[i].date.year,
+                   manager->expenses[i].category,
+                   manager->expenses[i].description,
+                   manager->expenses[i].amount);
             found++;
         }
     }
@@ -334,10 +333,10 @@ void filterExpensesByCategory()
     printf("\nTotal %d expenses found!\n", found);
 }
 
-void filterExpensesByDate()
+void filterExpensesByDate(struct ExpenseManager *manager)
 {
     int month, year, found = 0;
-    if (count == 0)
+    if (manager->count == 0)
     {
         printf("No expenses to filter.\n");
         return;
@@ -372,16 +371,16 @@ void filterExpensesByDate()
         return;
     }
 
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < manager->count; i++)
     {
-        if (month == expenses[i].date.month && year == expenses[i].date.year)
+        if (month == manager->expenses[i].date.month && year == manager->expenses[i].date.year)
         {
             printf("%-6d | %02d/%02d/%-4d | %-15s | %-25s | $%-9.2f\n",
-                   expenses[i].id,
-                   expenses[i].date.day, expenses[i].date.month, expenses[i].date.year,
-                   expenses[i].category,
-                   expenses[i].description,
-                   expenses[i].amount);
+                   manager->expenses[i].id,
+                   manager->expenses[i].date.day, manager->expenses[i].date.month, manager->expenses[i].date.year,
+                   manager->expenses[i].category,
+                   manager->expenses[i].description,
+                   manager->expenses[i].amount);
             found++;
         }
     }
@@ -394,57 +393,57 @@ void filterExpensesByDate()
     printf("\nTotal %d expenses found!\n", found);
 }
 
-void sortExpensesByAmount(int ascending)
+void sortExpensesByAmount(struct ExpenseManager *manager, int ascending)
 {
     struct Expense temp;
 
-    for (int i = 0; i < count - 1; i++)
+    for (int i = 0; i < manager->count - 1; i++)
     {
-        for (int j = i + 1; j < count; j++)
+        for (int j = i + 1; j < manager->count; j++)
         {
-            if (ascending && expenses[i].amount > expenses[j].amount)
+            if (ascending && manager->expenses[i].amount > manager->expenses[j].amount)
             {
-                temp = expenses[i];
-                expenses[i] = expenses[j];
-                expenses[j] = temp;
+                temp = manager->expenses[i];
+                manager->expenses[i] = manager->expenses[j];
+                manager->expenses[j] = temp;
             }
-            else if (!ascending && expenses[i].amount < expenses[j].amount)
+            else if (!ascending && manager->expenses[i].amount < manager->expenses[j].amount)
             {
-                temp = expenses[i];
-                expenses[i] = expenses[j];
-                expenses[j] = temp;
+                temp = manager->expenses[i];
+                manager->expenses[i] = manager->expenses[j];
+                manager->expenses[j] = temp;
             }
         }
     }
 
-    saveExpenses();
+    saveExpenses(manager);
     printf("Expenses sorted successfully!\n");
 }
 
-void sortExpensesByDate(int ascending)
+void sortExpensesByDate(struct ExpenseManager *manager, int ascending)
 {
     struct Expense temp;
 
-    for (int i = 0; i < count - 1; i++)
+    for (int i = 0; i < manager->count - 1; i++)
     {
-        for (int j = i + 1; j < count; j++)
+        for (int j = i + 1; j < manager->count; j++)
         {
             int swap = 0;
 
             if (ascending)
             {
-                if (expenses[i].date.year > expenses[j].date.year)
+                if (manager->expenses[i].date.year > manager->expenses[j].date.year)
                 {
                     swap = 1;
                 }
-                else if (expenses[i].date.year == expenses[j].date.year &&
-                         expenses[i].date.month > expenses[j].date.month)
+                else if (manager->expenses[i].date.year == manager->expenses[j].date.year &&
+                         manager->expenses[i].date.month > manager->expenses[j].date.month)
                 {
                     swap = 1;
                 }
-                else if (expenses[i].date.year == expenses[j].date.year &&
-                         expenses[i].date.month == expenses[j].date.month &&
-                         expenses[i].date.day > expenses[j].date.day)
+                else if (manager->expenses[i].date.year == manager->expenses[j].date.year &&
+                         manager->expenses[i].date.month == manager->expenses[j].date.month &&
+                         manager->expenses[i].date.day > manager->expenses[j].date.day)
                 {
                     swap = 1;
                 }
@@ -452,18 +451,18 @@ void sortExpensesByDate(int ascending)
 
             else
             {
-                if (expenses[i].date.year < expenses[j].date.year)
+                if (manager->expenses[i].date.year < manager->expenses[j].date.year)
                 {
                     swap = 1;
                 }
-                else if (expenses[i].date.year == expenses[j].date.year &&
-                         expenses[i].date.month < expenses[j].date.month)
+                else if (manager->expenses[i].date.year == manager->expenses[j].date.year &&
+                         manager->expenses[i].date.month < manager->expenses[j].date.month)
                 {
                     swap = 1;
                 }
-                else if (expenses[i].date.year == expenses[j].date.year &&
-                         expenses[i].date.month == expenses[j].date.month &&
-                         expenses[i].date.day < expenses[j].date.day)
+                else if (manager->expenses[i].date.year == manager->expenses[j].date.year &&
+                         manager->expenses[i].date.month == manager->expenses[j].date.month &&
+                         manager->expenses[i].date.day < manager->expenses[j].date.day)
                 {
                     swap = 1;
                 }
@@ -471,31 +470,31 @@ void sortExpensesByDate(int ascending)
 
             if (swap)
             {
-                temp = expenses[i];
-                expenses[i] = expenses[j];
-                expenses[j] = temp;
+                temp = manager->expenses[i];
+                manager->expenses[i] = manager->expenses[j];
+                manager->expenses[j] = temp;
             }
         }
     }
 
-    saveExpenses();
+    saveExpenses(manager);
     printf("Expenses sorted successfully!\n");
 }
 
-void categorySummary(void)
+void categorySummary(struct ExpenseManager *manager)
 {
     char categories[MAX_EXPENSES][50];
     float categoryTotals[MAX_EXPENSES] = {0};
     int categoryCounts[MAX_EXPENSES] = {0};
     int categoryCount = 0;
 
-    for (int i = 0; i < count; i++)
+    for (int i = 0; i < manager->count; i++)
     {
         int found = -1;
 
         for (int j = 0; j < categoryCount; j++)
         {
-            if (strcmp(expenses[i].category, categories[j]) == 0)
+            if (strcmp(manager->expenses[i].category, categories[j]) == 0)
             {
                 found = j;
                 break;
@@ -504,13 +503,13 @@ void categorySummary(void)
 
         if (found != -1)
         {
-            categoryTotals[found] += expenses[i].amount;
+            categoryTotals[found] += manager->expenses[i].amount;
             categoryCounts[found]++;
         }
         else
         {
-            strcpy(categories[categoryCount], expenses[i].category);
-            categoryTotals[categoryCount] = expenses[i].amount;
+            strcpy(categories[categoryCount], manager->expenses[i].category);
+            categoryTotals[categoryCount] = manager->expenses[i].amount;
             categoryCounts[categoryCount] = 1;
             categoryCount++;
         }

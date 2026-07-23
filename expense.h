@@ -19,22 +19,26 @@ struct Expense
     struct Date date;
 };
 
-extern int count;
-extern struct Expense expenses[MAX_EXPENSES];
+struct ExpenseManager
+{
+    struct Expense expenses[MAX_EXPENSES];
+    int count;
+};
+
 
 int isValidDate(int day, int month, int year);
-int findExpenseById(int id);
+int findExpenseById(struct ExpenseManager *manager, int id);
 
-void addNewExpense(void);
-void viewAllExpenses(void);
-void spendSummary(void);
-void viewExpenseById(void);
-void deleteExpenseById(void);
-void editExpenseById(void);
-void filterExpensesByCategory(void);
-void filterExpensesByDate(void);
-void sortExpensesByAmount(int ascending);
-void sortExpensesByDate(int ascending);
-void categorySummary(void);
+void addNewExpense(struct ExpenseManager *manager);
+void viewAllExpenses(struct ExpenseManager *manager);
+void spendSummary(struct ExpenseManager *manager);
+void viewExpenseById(struct ExpenseManager *manager);
+void deleteExpenseById(struct ExpenseManager *manager);
+void editExpenseById(struct ExpenseManager *manager);
+void filterExpensesByCategory(struct ExpenseManager *manager);
+void filterExpensesByDate(struct ExpenseManager *manager);
+void sortExpensesByAmount(struct ExpenseManager *manager, int ascending);
+void sortExpensesByDate(struct ExpenseManager *manager, int ascending);
+void categorySummary(struct ExpenseManager *manager);
 
 #endif

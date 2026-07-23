@@ -3,9 +3,11 @@
 #include "file.h"
 #include "utils.h"
 
+struct ExpenseManager manager = {0};
+
 int main()
 {
-    loadExpenses();
+    loadExpenses(&manager);
 
     int choice, filter_choice, sort_choice;
     do
@@ -29,27 +31,27 @@ int main()
         switch (choice)
         {
         case 1:
-            addNewExpense();
+            addNewExpense(&manager);
             break;
 
         case 2:
-            viewAllExpenses();
+            viewAllExpenses(&manager);
             break;
 
         case 3:
-            viewExpenseById();
+            viewExpenseById(&manager);
             break;
 
         case 4:
-            editExpenseById();
+            editExpenseById(&manager);
             break;
 
         case 5:
-            deleteExpenseById();
+            deleteExpenseById(&manager);
             break;
 
         case 6:
-            if (count == 0)
+            if (manager.count == 0)
             {
                 printf("No expense to be Filtered.\n");
                 break;
@@ -67,11 +69,11 @@ int main()
             switch (filter_choice)
             {
             case 1:
-                filterExpensesByCategory();
+                filterExpensesByCategory(&manager);
                 break;
 
             case 2:
-                filterExpensesByDate();
+                filterExpensesByDate(&manager);
                 break;
 
             case 3:
@@ -86,7 +88,7 @@ int main()
             break;
 
         case 7:
-            if (count == 0)
+            if (manager.count == 0)
             {
                 printf("No expense to be sort.\n");
                 break;
@@ -106,19 +108,19 @@ int main()
             switch (sort_choice)
             {
             case 1:
-                sortExpensesByAmount(1);
+                sortExpensesByAmount(&manager, 1);
                 break;
 
             case 2:
-                sortExpensesByAmount(0);
+                sortExpensesByAmount(&manager, 0);
                 break;
 
             case 3:
-                sortExpensesByDate(1);
+                sortExpensesByDate(&manager, 1);    
                 break;
 
             case 4:
-                sortExpensesByDate(0);
+                sortExpensesByDate(&manager, 0);
                 break;
 
             case 5:
@@ -132,11 +134,11 @@ int main()
             break;
 
         case 8:
-            categorySummary();
+            categorySummary(&manager);
             break;
 
         case 9:
-            spendSummary();
+            spendSummary(&manager);
             break;
 
         case 10:

@@ -2,7 +2,7 @@
 #include "expense.h"
 #include "file.h"
 
-void loadExpenses(){
+void loadExpenses(struct ExpenseManager *manager){
     FILE *ptr = fopen("expenses.dat", "rb");
 
     if (ptr == NULL)
@@ -10,22 +10,22 @@ void loadExpenses(){
         return;
     }
     
-    fread(&count, sizeof(count), 1, ptr);
+    fread(&manager->count, sizeof(manager->count), 1, ptr);
 
-    if (count < 0 || count > MAX_EXPENSES)
+    if (manager->count < 0 || manager->count > MAX_EXPENSES)
     {
         printf("Invalid expense data!\n");
-        count = 0;
+        manager->count = 0;
         fclose(ptr);
         return;
     }
 
-    fread(expenses, sizeof(struct Expense), count, ptr);
+    fread(manager->expenses, sizeof(struct Expense), manager->count, ptr);
 
     fclose(ptr);
 }
 
-void saveExpenses(){
+void saveExpenses(struct ExpenseManager *manager){
     FILE *ptr = fopen("expenses.dat", "wb");
 
     if (ptr == NULL)
@@ -34,8 +34,8 @@ void saveExpenses(){
         return;
     }
     
-    fwrite(&count, sizeof(count), 1, ptr);
-    fwrite(expenses, sizeof(struct Expense), count, ptr);
+    fwrite(&manager->count, sizeof(manager->count), 1, ptr);
+    fwrite(manager->expenses, sizeof(struct Expense), manager->count, ptr);
 
     fclose(ptr);
 }
