@@ -2,6 +2,7 @@
 #include <string.h>
 #include "expense.h"
 #include "file.h"
+#include "utils.h"
 
 int count = 0;
 struct Expense expenses[MAX_EXPENSES];
@@ -46,13 +47,6 @@ int findExpenseById(int id)
     }
     return -1;
 }
-void clearInputBuffer()
-{
-    int character;
-
-    while ((character = getchar()) != '\n' && character != EOF)
-        ;
-}
 
 void addNewExpense()
 {
@@ -79,13 +73,8 @@ void addNewExpense()
     expenses[count].category[strcspn(expenses[count].category, "\n")] = '\0';
 
     // Get Amount
-    printf("Enter Amount: ");
-    if (scanf("%f", &expenses[count].amount) != 1)
-    {
-        printf("Invalid Amount!\n");
-        clearInputBuffer();
-        return;
-    }
+    expenses[count].amount = getFloat("Enter Amount: ");
+
     if (expenses[count].amount <= 0)
     {
         printf("Amount must be greater than 0!\n");
@@ -93,29 +82,9 @@ void addNewExpense()
     }
 
     // Get Date
-    printf("Enter Day: ");
-    if (scanf("%d", &expenses[count].date.day) != 1)
-    {
-        printf("Invalid Date!\n");
-        clearInputBuffer();
-        return;
-    }
-
-    printf("Enter Month: ");
-    if (scanf("%d", &expenses[count].date.month) != 1)
-    {
-        printf("Invalid Month!\n");
-        clearInputBuffer();
-        return;
-    }
-
-    printf("Enter year: ");
-    if (scanf("%d", &expenses[count].date.year) != 1)
-    {
-        printf("Invalid Year!\n");
-        clearInputBuffer();
-        return;
-    }
+    expenses[count].date.day = getInt("Enter Day: ");
+    expenses[count].date.month = getInt("Enter Month: ");
+    expenses[count].date.year = getInt("Enter Year: ");
 
     if (!isValidDate(expenses[count].date.day, expenses[count].date.month, expenses[count].date.year))
     {
@@ -202,12 +171,8 @@ void viewExpenseById()
 {
     int id;
 
-    printf("\nEnter ID: ");
-    if (scanf("%d", &id) != 1)
-    {
-        printf("Wrong ID!\n");
-        return;
-    }
+    id = getInt("Enter ID: ");
+
     int index = findExpenseById(id);
     if (index == -1)
     {
@@ -244,12 +209,8 @@ void deleteExpenseById()
         return;
     }
 
-    printf("\nEnter ID: ");
-    if (scanf("%d", &id) != 1)
-    {
-        printf("Wrong ID!\n");
-        return;
-    }
+    id = getInt("Enter ID: ");
+
     int index = findExpenseById(id);
     if (index == -1)
     {
@@ -281,15 +242,7 @@ void editExpenseById(void)
         return;
     }
 
-    printf("Enter ID to edit: ");
-
-    if (scanf("%d", &id) != 1)
-    {
-        printf("Invalid ID!\n");
-
-        clearInputBuffer();
-        return;
-    }
+    id = getInt("Enter ID: ");
 
     int index = findExpenseById(id);
 
@@ -309,41 +262,19 @@ void editExpenseById(void)
         fgets(expenses[index].category, 50, stdin);
         expenses[index].category[strcspn(expenses[index].category, "\n")] = '\0';
 
-        printf("Enter new Amount: ");
-        if (scanf("%f", &amount) != 1)
-        {
-            printf("Invalid Amount!\n");
-            return;
-        }
+        amount = getFloat("Enter Amount: ");
+
         if (amount <= 0)
         {
             printf("Amount should be greater than 0.\n");
             return;
         }
 
-        printf("Enter Day: ");
-        if (scanf("%d", &day) != 1)
-        {
-            printf("Invalid Date!\n");
-            clearInputBuffer();
-            return;
-        }
+        day = getInt("Enter Day: ");
 
-        printf("Enter Month: ");
-        if (scanf("%d", &month) != 1)
-        {
-            printf("Invalid Month!\n");
-            clearInputBuffer();
-            return;
-        }
+        month = getInt("Enter Month: ");
 
-        printf("Enter year: ");
-        if (scanf("%d", &year) != 1)
-        {
-            printf("Invalid Year!\n");
-            clearInputBuffer();
-            return;
-        }
+        year = getInt("Enter Year: ");
 
         if (!isValidDate(day, month, year))
         {

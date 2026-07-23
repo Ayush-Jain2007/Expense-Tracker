@@ -24,7 +24,6 @@ extern struct Expense expenses[MAX_EXPENSES];
 
 int isValidDate(int day, int month, int year);
 int findExpenseById(int id);
-void clearInputBuffer(void);
 
 void addNewExpense(void);
 void viewAllExpenses(void);

@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "expense.h"
 #include "file.h"
+#include "utils.h"
 
 int main()
 {
@@ -23,14 +24,7 @@ int main()
         printf("  [9] View Total Spending Summary\n");
         printf("  [10] Exit Application\n");
         printf("\n-------------------------------------------------------------------------------\n");
-        printf("Enter your choice (1-10): ");
-
-        if (scanf("%d", &choice) != 1)
-        {
-            printf("Invalid input! Please enter a integer.\n");
-            clearInputBuffer();
-            choice = 0;
-        }
+        choice = getIntInRange("Enter your choice (1-10): ", 1, 10);
 
         switch (choice)
         {
@@ -68,14 +62,7 @@ int main()
             printf("  [2] Filter Expense By Date\n");
             printf("  [3] Return\n");
             printf("\n-------------------------------------------------------------------------------\n");
-            printf("Enter your choice (1-3): ");
-
-            if (scanf("%d", &filter_choice) != 1)
-            {
-                printf("Invalid input! Please enter a integer.\n");
-                clearInputBuffer();
-                filter_choice = 0;
-            }
+            filter_choice = getIntInRange("Enter your choice (1-3): ", 1, 3);
 
             switch (filter_choice)
             {
@@ -114,14 +101,7 @@ int main()
             printf("  [4] Sort By Date (Newest to Oldest)\n");
             printf("  [5] Return\n");
             printf("\n-------------------------------------------------------------------------------\n");
-            printf("Enter your choice (1-5): ");
-
-            if (scanf("%d", &sort_choice) != 1)
-            {
-                printf("Invalid input! Please enter a integer.\n");
-                clearInputBuffer();
-                sort_choice = 0;
-            }
+            sort_choice = getIntInRange("Enter your choice (1-5): ", 1, 5);
 
             switch (sort_choice)
             {

@@ -8,7 +8,7 @@ The project is being developed incrementally to practice core C programming conc
 
 ## Current Version
 
-**Version 1.8 — Category-wise Spending Summary**
+**Version 1.9 — Reusable Input Handling Utilities**
 
 ---
 
@@ -45,6 +45,11 @@ The project is being developed incrementally to practice core C programming conc
 * Display the number of expenses in each category
 * Display the total amount spent per category
 * Save expenses to a binary file
+* Reusable input validation utilities
+* Safe integer input handling
+* Integer range validation
+* Safe floating-point input handling
+* Centralized input buffer cleanup
 * Load previously saved expenses when the program starts
 * Supports up to **100 expenses**
 
@@ -71,10 +76,12 @@ expense-tracker/
 ├── expense.h
 ├── file.c
 ├── file.h
+├── utils.c
+├── utils.h
 ├── expenses.dat
 ├── output/
 └── README.md
-````
+```
 
 > `expenses.dat` and the `output/` directory are generated locally and are ignored by Git.
 
@@ -127,6 +134,19 @@ Contains:
 Contains:
 
 * File function prototypes
+
+#### `utils.c`
+
+Contains reusable utility functions for:
+
+* Clearing the input buffer
+* Reading integer input
+* Reading integers within a specified range
+* Reading floating-point input
+
+#### `utils.h`
+
+Contains prototypes for reusable utility functions.
 
 ---
 
@@ -193,13 +213,13 @@ This allows expense data to persist between program executions.
 Using GCC:
 
 ```bash
-gcc main.c expense.c file.c -o output/expense_tracker
+gcc main.c expense.c file.c utils.c -o output/expense_tracker
 ```
 
 For additional compiler warnings:
 
 ```bash
-gcc -Wall -Wextra -g3 main.c expense.c file.c -o output/expense_tracker
+gcc -Wall -Wextra -g3 main.c expense.c file.c utils.c -o output/expense_tracker
 ```
 
 ---
@@ -462,6 +482,11 @@ This project uses several important C programming concepts:
 * Deleting
 * Filtering
 * Sorting
+* Code reuse
+* Utility modules
+* Centralized input validation
+* Abstraction
+* Defensive input handling
 * Data aggregation
 
 ---
@@ -535,6 +560,15 @@ This project uses several important C programming concepts:
 * Calculate total spending per category
 * Display category-wise financial statistics
 
+### Version 1.9 — Reusable Input Handling Utilities
+
+* Create reusable `getInt()` function
+* Create reusable `getIntInRange()` function
+* Create reusable `getFloat()` function
+* Centralize input buffer cleanup
+* Reduce duplicated input validation code
+* Improve input handling throughout the application
+
 ---
 
 ## Current Limitations
@@ -560,10 +594,10 @@ This project uses several important C programming concepts:
 * [x] Filter expenses by date
 * [x] Sort expenses by amount or date
 * [x] Generate category-wise spending summaries
+* [x] Create reusable input handling utilities
 * [ ] Add a build system such as a `Makefile`
 * [ ] Replace fixed-size storage with dynamic memory
 * [ ] Improve monetary value handling using integer cents instead of `float`
-* [ ] Create reusable input utility functions
 * [ ] Improve error handling for file operations
 
 ---
