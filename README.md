@@ -8,7 +8,7 @@ The project is being developed incrementally to practice core C programming conc
 
 ## Current Version
 
-**Version 1.6 — Expense Sorting**
+**Version 1.8 — Category-wise Spending Summary**
 
 ---
 
@@ -41,6 +41,9 @@ The project is being developed incrementally to practice core C programming conc
 * Sort expenses by amount
 * Sort expenses by date
 * Sort in ascending or descending order
+* Generate category-wise spending summaries
+* Display the number of expenses in each category
+* Display the total amount spent per category
 * Save expenses to a binary file
 * Load previously saved expenses when the program starts
 * Supports up to **100 expenses**
@@ -233,8 +236,9 @@ After starting the program, the following menu is displayed:
   [5] Delete Expense
   [6] Filter Expense
   [7] Sort Expenses
-  [8] View Total Spending Summary
-  [9] Exit Application
+  [8] Category Summary
+  [9] View Total Spending Summary
+  [10] Exit Application
 ```
 
 ---
@@ -447,35 +451,18 @@ For example:
 This project uses several important C programming concepts:
 
 * Structures
-* Nested structures
-* Arrays of structures
+* Arrays
 * Functions
-* Function prototypes
-* Header files
-* Header guards
 * Multiple source files
-* `extern` variables
-* `scanf()` input handling
-* `fgets()` string input
-* Input buffer cleanup
-* String manipulation using `strcspn()`
-* `strcmp()` string comparison
-* Loops
-* Conditional statements
-* `switch` statements
-* File handling
-* Binary file I/O
-* `fopen()`
-* `fclose()`
-* `fread()`
-* `fwrite()`
+* Header files
+* File I/O
 * Input validation
-* Leap year calculations
-* Array searching
-* Array element shifting
-* Filtering data
-* Basic statistical calculations
-* Formatted output using `printf()`
+* Searching
+* Editing
+* Deleting
+* Filtering
+* Sorting
+* Data aggregation
 
 ---
 
@@ -518,14 +505,22 @@ This project uses several important C programming concepts:
 * Handle non-existent expense IDs
 * Create reusable `findExpenseById()` function
 
-### Version 1.5 — Expense Filtering
+### * Version 1.5 — Expense Management
+
+* Edit an existing expense by ID
+* Delete an expense by ID
+* Reuse `findExpenseById()`
+* Save changes to the binary file
+* Maintain array integrity after deletion
+
+### Version 1.6 — Expense Filtering
 
 * Filter expenses by category
 * Filter expenses by month and year
 * Display matching expenses
 * Display the number of matching expenses
 
-### Version 1.6 — Expense Sorting
+### Version 1.7 — Expense Sorting
 
 * Sort expenses by amount
 * Sort expenses by date
@@ -533,15 +528,19 @@ This project uses several important C programming concepts:
 * Support descending sorting
 * Save the sorted order to the binary data file
 
+### Version 1.8 — Category-wise Spending Summary
+
+* Group expenses by category
+* Count expenses in each category
+* Calculate total spending per category
+* Display category-wise financial statistics
+
 ---
 
 ## Current Limitations
 
 * Maximum of 100 expenses
 * Expenses are stored in a binary file
-* No search by description
-* No sorting functionality
-* No category-wise spending summary
 * The program uses `float` for monetary values
 * Input handling can be further improved
 * Some input logic is repeated across multiple functions
@@ -560,7 +559,7 @@ This project uses several important C programming concepts:
 * [x] Filter expenses by category
 * [x] Filter expenses by date
 * [x] Sort expenses by amount or date
-* [ ] Generate category-wise spending summaries
+* [x] Generate category-wise spending summaries
 * [ ] Add a build system such as a `Makefile`
 * [ ] Replace fixed-size storage with dynamic memory
 * [ ] Improve monetary value handling using integer cents instead of `float`

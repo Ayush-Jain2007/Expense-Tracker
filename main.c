@@ -19,10 +19,11 @@ int main()
         printf("  [5] Delete Expense\n");
         printf("  [6] Filter Expense\n");
         printf("  [7] Sort Expenses\n");
-        printf("  [8] View Total Spending Summary\n");
-        printf("  [9] Exit Application\n");
+        printf("  [8] Category Summary\n");
+        printf("  [9] View Total Spending Summary\n");
+        printf("  [10] Exit Application\n");
         printf("\n-------------------------------------------------------------------------------\n");
-        printf("Enter your choice (1-9): ");
+        printf("Enter your choice (1-10): ");
 
         if (scanf("%d", &choice) != 1)
         {
@@ -151,19 +152,23 @@ int main()
             break;
 
         case 8:
-            spendSummary();
+            categorySummary();
             break;
 
         case 9:
+            spendSummary();
+            break;
+
+        case 10:
             printf("Exiting...\n");
             break;
 
         default:
-            printf("Enter a number between 1 and 9.\n");
+            printf("Enter a number between 1 and 10.\n");
             break;
         }
 
-    } while (choice != 9);
+    } while (choice != 10);
 
     return 0;
 }

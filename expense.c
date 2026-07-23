@@ -62,7 +62,6 @@ void addNewExpense()
         return;
     }
 
-
     // Removing leftover \n
     clearInputBuffer();
 
@@ -464,12 +463,13 @@ void filterExpensesByDate()
     printf("\nTotal %d expenses found!\n", found);
 }
 
-void sortExpensesByAmount(int ascending){
+void sortExpensesByAmount(int ascending)
+{
     struct Expense temp;
 
-    for (int i = 0; i < count-1; i++)
+    for (int i = 0; i < count - 1; i++)
     {
-        for (int j = i+1; j < count; j++)
+        for (int j = i + 1; j < count; j++)
         {
             if (ascending && expenses[i].amount > expenses[j].amount)
             {
@@ -490,12 +490,13 @@ void sortExpensesByAmount(int ascending){
     printf("Expenses sorted successfully!\n");
 }
 
-void sortExpensesByDate(int ascending){
+void sortExpensesByDate(int ascending)
+{
     struct Expense temp;
 
-    for (int i = 0; i < count-1; i++)
+    for (int i = 0; i < count - 1; i++)
     {
-        for (int j = i+1; j < count; j++)
+        for (int j = i + 1; j < count; j++)
         {
             int swap = 0;
 
@@ -505,13 +506,13 @@ void sortExpensesByDate(int ascending){
                 {
                     swap = 1;
                 }
-                else if (expenses[i].date.year == expenses[j].date.year && 
-                         expenses[i].date.month > expenses[j].date.month )
+                else if (expenses[i].date.year == expenses[j].date.year &&
+                         expenses[i].date.month > expenses[j].date.month)
                 {
                     swap = 1;
                 }
-                else if (expenses[i].date.year == expenses[j].date.year && 
-                         expenses[i].date.month == expenses[j].date.month && 
+                else if (expenses[i].date.year == expenses[j].date.year &&
+                         expenses[i].date.month == expenses[j].date.month &&
                          expenses[i].date.day > expenses[j].date.day)
                 {
                     swap = 1;
@@ -524,19 +525,19 @@ void sortExpensesByDate(int ascending){
                 {
                     swap = 1;
                 }
-                else if (expenses[i].date.year == expenses[j].date.year && 
-                         expenses[i].date.month < expenses[j].date.month )
+                else if (expenses[i].date.year == expenses[j].date.year &&
+                         expenses[i].date.month < expenses[j].date.month)
                 {
                     swap = 1;
                 }
-                else if (expenses[i].date.year == expenses[j].date.year && 
-                         expenses[i].date.month == expenses[j].date.month && 
+                else if (expenses[i].date.year == expenses[j].date.year &&
+                         expenses[i].date.month == expenses[j].date.month &&
                          expenses[i].date.day < expenses[j].date.day)
                 {
                     swap = 1;
                 }
             }
-            
+
             if (swap)
             {
                 temp = expenses[i];
@@ -545,7 +546,59 @@ void sortExpensesByDate(int ascending){
             }
         }
     }
-    
+
     saveExpenses();
     printf("Expenses sorted successfully!\n");
+}
+
+void categorySummary(void)
+{
+    char categories[MAX_EXPENSES][50];
+    float categoryTotals[MAX_EXPENSES] = {0};
+    int categoryCounts[MAX_EXPENSES] = {0};
+    int categoryCount = 0;
+
+    for (int i = 0; i < count; i++)
+    {
+        int found = -1;
+
+        for (int j = 0; j < categoryCount; j++)
+        {
+            if (strcmp(expenses[i].category, categories[j]) == 0)
+            {
+                found = j;
+                break;
+            }
+        }
+
+        if (found != -1)
+        {
+            categoryTotals[found] += expenses[i].amount;
+            categoryCounts[found]++;
+        }
+        else
+        {
+            strcpy(categories[categoryCount], expenses[i].category);
+            categoryTotals[categoryCount] = expenses[i].amount;
+            categoryCounts[categoryCount] = 1;
+            categoryCount++;
+        }
+    }
+
+    printf("\n==================================================\n");
+    printf("                 CATEGORY SUMMARY\n");
+    printf("==================================================\n");
+    printf("%-20s | %-10s | %-15s\n",
+           "Category", "Expenses", "Total Spent");
+    printf("--------------------------------------------------\n");
+
+    for (int i = 0; i < categoryCount; i++)
+    {
+        printf("%-20s | %-10d | $%-14.2f\n",
+               categories[i],
+               categoryCounts[i],
+               categoryTotals[i]);
+    }
+
+    printf("--------------------------------------------------\n");
 }

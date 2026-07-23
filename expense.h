@@ -36,5 +36,6 @@ void filterExpensesByCategory(void);
 void filterExpensesByDate(void);
 void sortExpensesByAmount(int ascending);
 void sortExpensesByDate(int ascending);
+void categorySummary(void);
 
 #endif
