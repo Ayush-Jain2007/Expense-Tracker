@@ -749,7 +749,7 @@ This project uses several important C programming concepts:
 ---
 
 
-## Future Improvements
+## Completed Roadmap
 
 * [x] Save expenses to a file
 * [x] Load expenses when the program starts
