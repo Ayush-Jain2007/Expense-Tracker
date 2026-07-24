@@ -8,7 +8,7 @@ The project is being developed incrementally to practice core C programming conc
 
 ## Current Version
 
-**Version 2.4 — Dynamic Memory Allocation**
+**Version 2.5.0 — Makefile Build System**
 
 ---
 
@@ -54,7 +54,6 @@ The project is being developed incrementally to practice core C programming conc
 * Pass expense data between modules using structure pointers
 * Reduce reliance on global variables
 * Load previously saved expenses when the program starts
-* Supports up to **100 expenses**
 * Reusable expense display functions
 * Centralized expense table formatting
 * Reusable screen pause utility
@@ -88,9 +87,11 @@ expense-tracker/
 ├── file.h
 ├── utils.c
 ├── utils.h
-├── expenses.dat
-├── output/
-└── README.md
+├── Makefile
+├── README.md
+│
+├── expenses.dat       # Generated locally
+└── output/            # Generated locally
 ```
 
 > `expenses.dat` and the `output/` directory are generated locally and are ignored by Git.
@@ -204,7 +205,7 @@ struct ExpenseManager
 {
     struct Expense *expenses;
     int count;
-    int capacity
+    int capacity;
 };
 ```
 
@@ -238,23 +239,27 @@ This allows expense data to persist between program executions.
 
 ---
 
-## How to Compile
+## How to Build
 
-Using GCC:
+### Using the Makefile
 
-```bash
-gcc main.c expense.c file.c utils.c -o output/expense_tracker
-```
+On Windows with MinGW:
 
-For additional compiler warnings:
-
-```bash
-gcc -Wall -Wextra -g3 main.c expense.c file.c utils.c -o output/expense_tracker
+```powershell
+mingw32-make
 ```
 
 ---
 
 ## How to Run
+
+### Using the Makefile
+
+Build the project:
+
+```bash
+mingw32-make
+```
 
 ### Windows
 
@@ -605,6 +610,9 @@ This project uses several important C programming concepts:
 * Avoiding floating-point precision issues
 * Data representation
 * Integer division and remainder operations
+* Build systems
+* Makefiles
+* Automated compilation
 
 ---
 
@@ -617,7 +625,7 @@ This project uses several important C programming concepts:
 * Calculate spending summary
 * Store expense information using structures
 
-### Version 1.1 — Improved Reliability
+### Version 1.1.0 — Improved Reliability
 
 * Validate expense amounts
 * Reject zero and negative amounts
@@ -625,14 +633,14 @@ This project uses several important C programming concepts:
 * Add comprehensive date validation
 * Add leap year support
 
-### Version 1.2 — File Persistence
+### Version 1.2.0 — File Persistence
 
 * Save expenses to a binary file
 * Load expenses when the program starts
 * Preserve expense data between program executions
 * Validate loaded expense count
 
-### Version 1.3 — Modular Project Structure
+### Version 1.3.0 — Modular Project Structure
 
 * Split the program into multiple source files
 * Create separate header files
@@ -640,14 +648,14 @@ This project uses several important C programming concepts:
 * Use `extern` for shared global variables
 * Add header guards
 
-### Version 1.4 — Expense Lookup by ID
+### Version 1.4.0 — Expense Lookup by ID
 
 * Search for an expense by ID
 * Display a single expense
 * Handle non-existent expense IDs
 * Create reusable `findExpenseById()` function
 
-### Version 1.5 — Expense Management
+### Version 1.5.0 — Expense Management
 
 * Edit an existing expense by ID
 * Delete an expense by ID
@@ -655,14 +663,14 @@ This project uses several important C programming concepts:
 * Save changes to the binary file
 * Maintain array integrity after deletion
 
-### Version 1.6 — Expense Filtering
+### Version 1.6.0 — Expense Filtering
 
 * Filter expenses by category
 * Filter expenses by month and year
 * Display matching expenses
 * Display the number of matching expenses
 
-### Version 1.7 — Expense Sorting
+### Version 1.7.0 — Expense Sorting
 
 * Sort expenses by amount
 * Sort expenses by date
@@ -670,14 +678,14 @@ This project uses several important C programming concepts:
 * Support descending sorting
 * Save the sorted order to the binary data file
 
-### Version 1.8 — Category-wise Spending Summary
+### Version 1.8.0 — Category-wise Spending Summary
 
 * Group expenses by category
 * Count expenses in each category
 * Calculate total spending per category
 * Display category-wise financial statistics
 
-### Version 1.9 — Reusable Input Handling Utilities
+### Version 1.9.0 — Reusable Input Handling Utilities
 
 * Create reusable `getInt()` function
 * Create reusable `getIntInRange()` function
@@ -686,7 +694,7 @@ This project uses several important C programming concepts:
 * Reduce duplicated input validation code
 * Improve input handling throughout the application
 
-### Version 2.0 — ExpenseManager Architecture
+### Version 2.0.0 — ExpenseManager Architecture
 
 * Introduced `struct ExpenseManager`
 * Encapsulated the expense array and expense count
@@ -696,7 +704,7 @@ This project uses several important C programming concepts:
 * Updated file persistence functions to work with the manager
 * Updated CRUD, filtering, sorting, and summary operations
 
-### Version 2.1 — Display Logic Refactoring
+### Version 2.1.0 — Display Logic Refactoring
 
 * Added reusable `displayExpense()` function
 * Added reusable `displayExpenseTableHeader()` function
@@ -705,7 +713,7 @@ This project uses several important C programming concepts:
 * Reduced duplicated expense display code
 * Improved code organization and maintainability
 
-### Version 2.2 — Integer-Based Monetary Value Handling
+### Version 2.2.0 — Integer-Based Monetary Value Handling
 
 * Replaced `float` monetary values with integer cents
 * Updated expense amount storage to use `long`
@@ -716,20 +724,27 @@ This project uses several important C programming concepts:
 * Preserved sorting functionality with integer monetary values
 * Improved monetary calculation reliability
 
-### Version 2.3 — Improved File Error Handling
+### Version 2.3.0 — Improved File Error Handling
 
 * Added validation for `fread()` operations
 * Added validation for `fwrite()` operations
 * Added handling for incomplete or corrupted expense files
 * Improved reliability of file persistence
 
-### Version 2.4 — Dynamic Memory Allocation
+### Version 2.4.0 — Dynamic Memory Allocation
 
 * Replaced fixed-size expense storage with dynamic memory allocation
 * Removed the `MAX_EXPENSES` limit
 * Added automatic resizing using `realloc()`
 * Added safe memory cleanup using `free()`
 * Updated file loading and saving to support dynamic storage
+
+### Version 2.5.0 — Makefile Build System
+
+* Added a `Makefile` for project compilation
+* Added a `run` target to build and run the application
+* Added a `clean` target to remove the compiled executable
+* Simplified the build process from manually compiling every source file
 
 ---
 
@@ -751,7 +766,7 @@ This project uses several important C programming concepts:
 * [x] Improve monetary value handling using integer cents instead of `float`
 * [x] Improve error handling for file operations
 * [x] Replace fixed-size storage with dynamic memory
-* [ ] Add a build system such as a `Makefile`
+* [x] Add a build system such as a `Makefile`
 
 ---
 
