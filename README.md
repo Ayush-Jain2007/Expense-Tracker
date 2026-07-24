@@ -8,7 +8,7 @@ The project is being developed incrementally to practice core C programming conc
 
 ## Current Version
 
-**Version 2.3 — Improved File Error Handling**
+**Version 2.4 — Dynamic Memory Allocation**
 
 ---
 
@@ -202,8 +202,9 @@ Starting with Version 2.0, expense data is encapsulated inside an
 ```c
 struct ExpenseManager
 {
-    struct Expense expenses[MAX_EXPENSES];
+    struct Expense *expenses;
     int count;
+    int capacity
 };
 ```
 
@@ -646,7 +647,7 @@ This project uses several important C programming concepts:
 * Handle non-existent expense IDs
 * Create reusable `findExpenseById()` function
 
-### * Version 1.5 — Expense Management
+### Version 1.5 — Expense Management
 
 * Edit an existing expense by ID
 * Delete an expense by ID
@@ -722,15 +723,16 @@ This project uses several important C programming concepts:
 * Added handling for incomplete or corrupted expense files
 * Improved reliability of file persistence
 
+### Version 2.4 — Dynamic Memory Allocation
+
+* Replaced fixed-size expense storage with dynamic memory allocation
+* Removed the `MAX_EXPENSES` limit
+* Added automatic resizing using `realloc()`
+* Added safe memory cleanup using `free()`
+* Updated file loading and saving to support dynamic storage
+
 ---
 
-## Current Limitations
-
-* Maximum of 100 expenses
-* Expenses are stored in a binary file
-* Input handling can be further improved
-
----
 
 ## Future Improvements
 
@@ -748,8 +750,8 @@ This project uses several important C programming concepts:
 * [x] Create reusable input handling utilities
 * [x] Improve monetary value handling using integer cents instead of `float`
 * [x] Improve error handling for file operations
+* [x] Replace fixed-size storage with dynamic memory
 * [ ] Add a build system such as a `Makefile`
-* [ ] Replace fixed-size storage with dynamic memory
 
 ---
 

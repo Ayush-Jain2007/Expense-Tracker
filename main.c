@@ -7,6 +7,11 @@ struct ExpenseManager manager = {0};
 
 int main()
 {
+    if (!initializeManager(&manager))
+    {
+        printf("Failed to initialize expense manager.\n");
+        return 1;
+    }
     loadExpenses(&manager);
 
     int choice, filter_choice, sort_choice;
@@ -151,6 +156,8 @@ int main()
         }
 
     } while (choice != 10);
+
+    freeManager(&manager);
 
     return 0;
 }

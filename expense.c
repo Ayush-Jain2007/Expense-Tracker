@@ -1,8 +1,62 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "expense.h"
 #include "file.h"
 #include "utils.h"
+
+int initializeManager(struct ExpenseManager *manager)
+{
+    manager->capacity = 10;
+    manager->count = 0;
+
+    manager->expenses = malloc(manager->capacity * sizeof(struct Expense));
+
+    if (manager->expenses == NULL)
+    {
+        return 0;
+    }
+
+    return 1;
+}
+
+void freeManager(struct ExpenseManager *manager)
+{
+    free(manager->expenses);
+    manager->expenses = NULL;
+    manager->count = 0;
+    manager->capacity = 0;
+}
+
+int resizeManager(struct ExpenseManager *manager)
+{
+    int newCapacity = manager->capacity * 2;
+
+    struct Expense *temp = realloc(manager->expenses, newCapacity * sizeof(struct Expense));
+
+    if (temp == NULL)
+    {
+        return 0;
+    }
+
+    manager->expenses = temp;
+    manager->capacity = newCapacity;
+
+    return 1;
+}
+
+int ensureCapacity(struct ExpenseManager *manager, int required)
+{
+    while (manager->capacity < required)
+    {
+        if (!resizeManager(manager))
+        {
+            return 0;
+        }
+    }
+
+    return 1;
+}
 
 int isValidDate(int day, int month, int year)
 {
@@ -71,11 +125,12 @@ void displayExpenseTableLine(void)
 
 void addNewExpense(struct ExpenseManager *manager)
 {
-    if (manager->count >= MAX_EXPENSES)
+    if (!ensureCapacity(manager, manager->count + 1))
     {
-        printf("Storage is full!\n");
+        printf("Failed to allocate memory for new expense.\n");
         return;
     }
+
 
     // Removing leftover \n
     clearInputBuffer();
@@ -510,10 +565,22 @@ void categorySummary(struct ExpenseManager *manager)
         return;
     }
 
-    char categories[MAX_EXPENSES][50];
-    long categoryTotals[MAX_EXPENSES] = {0};
-    int categoryCounts[MAX_EXPENSES] = {0};
+    char (*categories)[50] = malloc(manager->count * sizeof(*categories));
+    long *categoryTotals = calloc(manager->count, sizeof(*categoryTotals));
+    int *categoryCounts = calloc(manager->count, sizeof(*categoryCounts));
     int categoryCount = 0;
+
+    if (categories == NULL || categoryTotals == NULL || categoryCounts == NULL)
+    {
+        printf("Memory allocation failed.\n");
+
+        free(categories);
+        free(categoryTotals);
+        free(categoryCounts);
+
+        pauseScreen();
+        return;
+    }
 
     for (int i = 0; i < manager->count; i++)
     {
@@ -559,6 +626,10 @@ void categorySummary(struct ExpenseManager *manager)
     }
 
     printf("--------------------------------------------------\n");
+
+    free(categories);
+    free(categoryTotals);
+    free(categoryCounts);
 
     pauseScreen();
 }

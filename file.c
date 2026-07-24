@@ -2,42 +2,55 @@
 #include "expense.h"
 #include "file.h"
 
-void loadExpenses(struct ExpenseManager *manager){
+void loadExpenses(struct ExpenseManager *manager)
+{
     FILE *ptr = fopen("expenses.dat", "rb");
 
     if (ptr == NULL)
     {
         return;
     }
-    
-    if (fread(&manager->count, sizeof(manager->count), 1, ptr) != 1)
+
+    int savedCount;
+
+    if (fread(&savedCount, sizeof(savedCount), 1, ptr) != 1)
     {
         printf("Error reading expense data!\n");
-        manager->count = 0;
         fclose(ptr);
         return;
     }
 
-    if (manager->count < 0 || manager->count > MAX_EXPENSES)
+    if (savedCount < 0)
     {
         printf("Invalid expense data!\n");
-        manager->count = 0;
         fclose(ptr);
         return;
     }
 
-    if (fread(manager->expenses, sizeof(struct Expense), manager->count, ptr) != (size_t)manager->count)
+    if (!ensureCapacity(manager, savedCount))
     {
-        printf("Error reading expense data!\n");
-        manager->count = 0;
+        printf("Failed to allocate memory for expenses!\n");
         fclose(ptr);
         return;
     }
+
+    if (fread(manager->expenses,
+              sizeof(struct Expense),
+              savedCount,
+              ptr) != (size_t)savedCount)
+    {
+        printf("Error reading expense data!\n");
+        fclose(ptr);
+        return;
+    }
+
+    manager->count = savedCount;
 
     fclose(ptr);
 }
 
-void saveExpenses(struct ExpenseManager *manager){
+void saveExpenses(struct ExpenseManager *manager)
+{
     FILE *ptr = fopen("expenses.dat", "wb");
 
     if (ptr == NULL)
@@ -45,8 +58,11 @@ void saveExpenses(struct ExpenseManager *manager){
         printf("Error opening file!\n");
         return;
     }
-    
-    if (fwrite(&manager->count, sizeof(manager->count), 1, ptr) != 1)
+
+    if (fwrite(&manager->count,
+               sizeof(manager->count),
+               1,
+               ptr) != 1)
     {
         printf("Error writing expense count!\n");
         fclose(ptr);
@@ -54,9 +70,9 @@ void saveExpenses(struct ExpenseManager *manager){
     }
 
     if (fwrite(manager->expenses,
-            sizeof(struct Expense),
-            manager->count,
-            ptr) != (size_t)manager->count)
+               sizeof(struct Expense),
+               manager->count,
+               ptr) != (size_t)manager->count)
     {
         printf("Error writing expense data!\n");
         fclose(ptr);

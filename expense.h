@@ -1,8 +1,6 @@
 #ifndef EXPENSE_H
 #define EXPENSE_H
 
-#define MAX_EXPENSES 100
-
 struct Date
 {
     int day;
@@ -21,11 +19,15 @@ struct Expense
 
 struct ExpenseManager
 {
-    struct Expense expenses[MAX_EXPENSES];
+    struct Expense *expenses;
     int count;
+    int capacity;
 };
 
-
+int initializeManager(struct ExpenseManager *manager);
+void freeManager(struct ExpenseManager *manager);
+int resizeManager(struct ExpenseManager *manager);
+int ensureCapacity(struct ExpenseManager *manager, int required);
 int isValidDate(int day, int month, int year);
 int findExpenseById(struct ExpenseManager *manager, int id);
 void displayExpense(struct Expense *expense);
