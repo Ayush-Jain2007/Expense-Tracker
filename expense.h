@@ -15,7 +15,7 @@ struct Expense
     int id;
     char description[50];
     char category[50];
-    float amount;
+    long amount;
     struct Date date;
 };
 

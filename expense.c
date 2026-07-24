@@ -33,7 +33,7 @@ int isValidDate(int day, int month, int year)
     return 1;
 }
 
-int findExpenseById(struct ExpenseManager *manager,int id)
+int findExpenseById(struct ExpenseManager *manager, int id)
 {
     for (int i = 0; i < manager->count; i++)
     {
@@ -45,15 +45,17 @@ int findExpenseById(struct ExpenseManager *manager,int id)
     return -1;
 }
 
-void displayExpense(struct Expense *expense){
-    printf("%-6d | %02d/%02d/%-4d | %-15s | %-25s | $%-9.2f\n",
+void displayExpense(struct Expense *expense)
+{
+    printf("%-6d | %02d/%02d/%-4d | %-15s | %-25s | $%ld.%02ld",
            expense->id,
            expense->date.day,
            expense->date.month,
            expense->date.year,
            expense->category,
            expense->description,
-           expense->amount);
+           expense->amount / 100,
+           expense->amount % 100);
 }
 
 void displayExpenseTableHeader(void)
@@ -92,13 +94,14 @@ void addNewExpense(struct ExpenseManager *manager)
     manager->expenses[manager->count].category[strcspn(manager->expenses[manager->count].category, "\n")] = '\0';
 
     // Get Amount
-    manager->expenses[manager->count].amount = getFloat("Enter Amount: ");
+    float inputAmount = getFloat("Enter Amount: ");
 
-    if (manager->expenses[manager->count].amount <= 0)
+    if (inputAmount <= 0)
     {
         printf("Amount must be greater than 0!\n");
         return;
     }
+    manager->expenses[manager->count].amount = (long)(inputAmount * 100 + 0.5f);
 
     // Get Date
     manager->expenses[manager->count].date.day = getInt("Enter Day: ");
@@ -127,13 +130,13 @@ void viewAllExpenses(struct ExpenseManager *manager)
     printf("===============================================================================\n");
     displayExpenseTableHeader();
     displayExpenseTableLine();
-    
+
     for (int i = 0; i < manager->count; i++)
     {
         displayExpense(&manager->expenses[i]);
     }
     displayExpenseTableLine();
-    
+
     pauseScreen();
 }
 
@@ -145,7 +148,7 @@ void spendSummary(struct ExpenseManager *manager)
         return;
     }
 
-    float total_spent = 0, average_cost = 0;
+    long total_spent = 0, average_cost = 0;
     int max_index = 0, min_index = 0;
 
     for (int i = 0; i < manager->count; i++)
@@ -161,20 +164,37 @@ void spendSummary(struct ExpenseManager *manager)
         }
     }
 
-    average_cost = (float)total_spent / manager->count;
-    printf("==================================================\n");
-    printf("                FINANCIAL OVERVIEW\n");
-    printf("==================================================\n\n");
-    printf("  +----------------------------------------------+\n");
+    average_cost = total_spent / manager->count;
+    printf("==========================================================\n");
+    printf("                  FINANCIAL OVERVIEW\n");
+    printf("==========================================================\n\n");
 
-    printf("  |  TOTAL SPENT :%10.2f                     |\n", total_spent);
-    printf("  |  TOTAL ITEMS :%6d                         |\n", manager->count);
-    printf("  |  AVERAGE COST:%10.2f/item                |\n", average_cost);
+    printf("  +------------------------------------------------------+\n");
 
-    printf("  +----------------------------------------------+\n");
-    printf("\n  [!] Largest Expense :  %-5.2f (%s)\n", manager->expenses[max_index].amount, manager->expenses[max_index].description);
-    printf("  [*] Smallest Expense:  %-5.2f (%s)\n", manager->expenses[min_index].amount, manager->expenses[min_index].description);
-    printf("\n==================================================\n");
+    printf("  |  TOTAL SPENT   :  $%ld.%02ld                         |\n",
+        total_spent / 100,
+        total_spent % 100);
+
+    printf("  |  TOTAL ITEMS   :  %10d                         |\n",
+        manager->count);
+
+    printf("  |  AVERAGE COST  :  $%ld.%02ld / item                  |\n",
+        average_cost / 100,
+        average_cost % 100);
+
+    printf("  +------------------------------------------------------+\n");
+
+    printf("\n  [!] Largest Expense  :  $%ld.%02ld  (%s)\n",
+        manager->expenses[max_index].amount / 100,
+        manager->expenses[max_index].amount % 100,
+        manager->expenses[max_index].description);
+
+    printf("  [*] Smallest Expense :  $%ld.%02ld  (%s)\n",
+        manager->expenses[min_index].amount / 100,
+        manager->expenses[min_index].amount % 100,
+        manager->expenses[min_index].description);
+
+    printf("\n==========================================================\n");
 
     pauseScreen();
 }
@@ -201,7 +221,7 @@ void viewExpenseById(struct ExpenseManager *manager)
         displayExpenseTableLine();
         displayExpense(&manager->expenses[index]);
         displayExpenseTableLine();
-    
+
         pauseScreen();
     }
 }
@@ -241,7 +261,7 @@ void deleteExpenseById(struct ExpenseManager *manager)
 void editExpenseById(struct ExpenseManager *manager)
 {
     int id, day, month, year;
-    float amount;
+    long amount;
 
     if (manager->count == 0)
     {
@@ -269,13 +289,15 @@ void editExpenseById(struct ExpenseManager *manager)
         fgets(manager->expenses[index].category, 50, stdin);
         manager->expenses[index].category[strcspn(manager->expenses[index].category, "\n")] = '\0';
 
-        amount = getFloat("Enter Amount: ");
+        amount = getFloat("Enter new Amount: ");
 
         if (amount <= 0)
         {
             printf("Amount should be greater than 0.\n");
             return;
         }
+
+        amount = (long)(amount * 100 + 0.5f);
 
         day = getInt("Enter Day: ");
 
@@ -489,7 +511,7 @@ void categorySummary(struct ExpenseManager *manager)
     }
 
     char categories[MAX_EXPENSES][50];
-    float categoryTotals[MAX_EXPENSES] = {0};
+    long categoryTotals[MAX_EXPENSES] = {0};
     int categoryCounts[MAX_EXPENSES] = {0};
     int categoryCount = 0;
 
@@ -529,10 +551,11 @@ void categorySummary(struct ExpenseManager *manager)
 
     for (int i = 0; i < categoryCount; i++)
     {
-        printf("%-20s | %-10d | $%-14.2f\n",
+        printf("%-20s | %-10d | $%ld.%02ld\n",
                categories[i],
                categoryCounts[i],
-               categoryTotals[i]);
+               categoryTotals[i] / 100,
+               categoryTotals[i] % 100);
     }
 
     printf("--------------------------------------------------\n");

@@ -8,7 +8,7 @@ The project is being developed incrementally to practice core C programming conc
 
 ## Current Version
 
-**Version 2.1 — Display Logic Refactoring**
+**Version 2.2 — Integer-Based Monetary Value Handling**
 
 ---
 
@@ -59,6 +59,9 @@ The project is being developed incrementally to practice core C programming conc
 * Centralized expense table formatting
 * Reusable screen pause utility
 * Reduced duplicated display logic
+* Store monetary values as integer cents
+* Avoid floating-point precision issues for monetary calculations
+* Display monetary values with proper decimal formatting
 
 ---
 
@@ -171,7 +174,7 @@ struct Expense
     int id;
     char description[50];
     char category[50];
-    float amount;
+    long amount;
     struct Date date;
 };
 ```
@@ -527,6 +530,10 @@ This project uses several important C programming concepts:
 * Reducing code duplication
 * Helper functions
 * Modular display logic
+* Integer-based monetary representation
+* Avoiding floating-point precision issues
+* Data representation
+* Integer division and remainder operations
 
 ---
 
@@ -627,13 +634,23 @@ This project uses several important C programming concepts:
 * Reduced duplicated expense display code
 * Improved code organization and maintainability
 
+### Version 2.2 — Integer-Based Monetary Value Handling
+
+* Replaced `float` monetary values with integer cents
+* Updated expense amount storage to use `long`
+* Updated expense input conversion
+* Updated expense display formatting
+* Updated spending summary calculations
+* Updated category summary calculations
+* Preserved sorting functionality with integer monetary values
+* Improved monetary calculation reliability
+
 ---
 
 ## Current Limitations
 
 * Maximum of 100 expenses
 * Expenses are stored in a binary file
-* The program uses `float` for monetary values
 * Input handling can be further improved
 * Some input logic is repeated across multiple functions
 
@@ -653,9 +670,9 @@ This project uses several important C programming concepts:
 * [x] Sort expenses by amount or date
 * [x] Generate category-wise spending summaries
 * [x] Create reusable input handling utilities
+* [x] Improve monetary value handling using integer cents instead of `float`
 * [ ] Add a build system such as a `Makefile`
 * [ ] Replace fixed-size storage with dynamic memory
-* [ ] Improve monetary value handling using integer cents instead of `float`
 * [ ] Improve error handling for file operations
 
 ---
