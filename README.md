@@ -8,7 +8,7 @@ The project is being developed incrementally to practice core C programming conc
 
 ## Current Version
 
-**Version 2.0 — ExpenseManager Architecture**
+**Version 2.1 — Display Logic Refactoring**
 
 ---
 
@@ -55,6 +55,10 @@ The project is being developed incrementally to practice core C programming conc
 * Reduce reliance on global variables
 * Load previously saved expenses when the program starts
 * Supports up to **100 expenses**
+* Reusable expense display functions
+* Centralized expense table formatting
+* Reusable screen pause utility
+* Reduced duplicated display logic
 
 ---
 
@@ -103,6 +107,9 @@ Contains:
 
 Contains:
 
+* Reusable expense display formatting
+* Expense table header formatting
+* Expense table separator formatting
 * Expense data
 * Expense creation
 * Expense display
@@ -142,10 +149,11 @@ Contains:
 
 Contains reusable utility functions for:
 
-* Clearing the input buffer
-* Reading integer input
-* Reading integers within a specified range
-* Reading floating-point input
+* Integer input handling
+* Floating-point input handling
+* String input handling
+* Input buffer cleanup
+* Screen pause functionality
 
 #### `utils.h`
 
@@ -513,6 +521,12 @@ This project uses several important C programming concepts:
 * Reducing global state
 * Manager-style data architecture
 * Data aggregation
+* Code refactoring
+* Code reuse
+* Separation of concerns
+* Reducing code duplication
+* Helper functions
+* Modular display logic
 
 ---
 
@@ -603,6 +617,15 @@ This project uses several important C programming concepts:
 * Improved data flow between modules
 * Updated file persistence functions to work with the manager
 * Updated CRUD, filtering, sorting, and summary operations
+
+### Version 2.1 — Display Logic Refactoring
+
+* Added reusable `displayExpense()` function
+* Added reusable `displayExpenseTableHeader()` function
+* Added reusable `displayExpenseTableLine()` function
+* Added reusable `pauseScreen()` utility
+* Reduced duplicated expense display code
+* Improved code organization and maintainability
 
 ---
 
