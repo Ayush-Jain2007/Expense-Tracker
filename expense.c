@@ -45,6 +45,28 @@ int findExpenseById(struct ExpenseManager *manager,int id)
     return -1;
 }
 
+void displayExpense(struct Expense *expense){
+    printf("%-6d | %02d/%02d/%-4d | %-15s | %-25s | $%-9.2f\n",
+           expense->id,
+           expense->date.day,
+           expense->date.month,
+           expense->date.year,
+           expense->category,
+           expense->description,
+           expense->amount);
+}
+
+void displayExpenseTableHeader(void)
+{
+    printf("%-6s | %-10s | %-15s | %-25s | %-10s\n",
+           "ID", "Date", "Category", "Description", "Amount ($)");
+}
+
+void displayExpenseTableLine(void)
+{
+    printf("-------------------------------------------------------------------------------\n");
+}
+
 void addNewExpense(struct ExpenseManager *manager)
 {
     if (manager->count >= MAX_EXPENSES)
@@ -103,24 +125,16 @@ void viewAllExpenses(struct ExpenseManager *manager)
     printf("===============================================================================\n");
     printf("                                  ALL EXPENSES\n");
     printf("===============================================================================\n");
-    printf("%-6s | %-10s | %-15s | %-25s | %-10s\n", "ID", "Date", "Category", "Description", "Amount ($)");
-    printf("-------------------------------------------------------------------------------\n");
-
+    displayExpenseTableHeader();
+    displayExpenseTableLine();
+    
     for (int i = 0; i < manager->count; i++)
     {
-        printf("%-6d | %02d/%02d/%-4d | %-15s | %-25s | $%-9.2f\n",
-                manager->expenses[i].id,
-                manager->expenses[i].date.day, 
-                manager->expenses[i].date.month,
-                manager->expenses[i].date.year,
-                manager->expenses[i].category,
-                manager->expenses[i].description,
-                manager->expenses[i].amount);
+        displayExpense(&manager->expenses[i]);
     }
-    printf("-------------------------------------------------------------------------------\n");
-    printf("Press Enter to continue...");
-    getchar();
-    getchar();
+    displayExpenseTableLine();
+    
+    pauseScreen();
 }
 
 void spendSummary(struct ExpenseManager *manager)
@@ -161,9 +175,8 @@ void spendSummary(struct ExpenseManager *manager)
     printf("\n  [!] Largest Expense :  %-5.2f (%s)\n", manager->expenses[max_index].amount, manager->expenses[max_index].description);
     printf("  [*] Smallest Expense:  %-5.2f (%s)\n", manager->expenses[min_index].amount, manager->expenses[min_index].description);
     printf("\n==================================================\n");
-    printf("Press Enter to continue...");
-    getchar();
-    getchar();
+
+    pauseScreen();
 }
 
 void viewExpenseById(struct ExpenseManager *manager)
@@ -183,18 +196,13 @@ void viewExpenseById(struct ExpenseManager *manager)
         printf("===============================================================================\n");
         printf("                                 EXPENSE BY ID\n");
         printf("===============================================================================\n");
-        printf("%-6s | %-10s | %-15s | %-25s | %-10s\n", "ID", "Date", "Category", "Description", "Amount ($)");
-        printf("-------------------------------------------------------------------------------\n");
-        printf("%-6d | %02d/%02d/%-4d | %-15s | %-25s | $%-9.2f\n",
-               manager->expenses[index].id,
-               manager->expenses[index].date.day, manager->expenses[index].date.month, manager->expenses[index].date.year,
-               manager->expenses[index].category,
-               manager->expenses[index].description,
-               manager->expenses[index].amount);
-        printf("-------------------------------------------------------------------------------\n\n");
-        printf("Press Enter to continue...");
-        getchar();
-        getchar();
+        displayExpenseTableHeader();
+
+        displayExpenseTableLine();
+        displayExpense(&manager->expenses[index]);
+        displayExpenseTableLine();
+    
+        pauseScreen();
     }
 }
 
@@ -315,12 +323,7 @@ void filterExpensesByCategory(struct ExpenseManager *manager)
     {
         if (strcmp(input_category, manager->expenses[i].category) == 0)
         {
-            printf("%-6d | %02d/%02d/%-4d | %-15s | %-25s | $%-9.2f\n",
-                   manager->expenses[i].id,
-                   manager->expenses[i].date.day, manager->expenses[i].date.month, manager->expenses[i].date.year,
-                   manager->expenses[i].category,
-                   manager->expenses[i].description,
-                   manager->expenses[i].amount);
+            displayExpense(&manager->expenses[i]);
             found++;
         }
     }
@@ -329,7 +332,7 @@ void filterExpensesByCategory(struct ExpenseManager *manager)
         printf("\nNo Expense found with those category!\n");
         return;
     }
-    printf("-------------------------------------------------------------------------------\n");
+    displayExpenseTableLine();
     printf("\nTotal %d expenses found!\n", found);
 }
 
@@ -375,12 +378,7 @@ void filterExpensesByDate(struct ExpenseManager *manager)
     {
         if (month == manager->expenses[i].date.month && year == manager->expenses[i].date.year)
         {
-            printf("%-6d | %02d/%02d/%-4d | %-15s | %-25s | $%-9.2f\n",
-                   manager->expenses[i].id,
-                   manager->expenses[i].date.day, manager->expenses[i].date.month, manager->expenses[i].date.year,
-                   manager->expenses[i].category,
-                   manager->expenses[i].description,
-                   manager->expenses[i].amount);
+            displayExpense(&manager->expenses[i]);
             found++;
         }
     }
@@ -389,7 +387,7 @@ void filterExpensesByDate(struct ExpenseManager *manager)
         printf("\nNo Expense found with those Date!\n");
         return;
     }
-    printf("-------------------------------------------------------------------------------\n");
+    displayExpenseTableLine();
     printf("\nTotal %d expenses found!\n", found);
 }
 
@@ -483,6 +481,13 @@ void sortExpensesByDate(struct ExpenseManager *manager, int ascending)
 
 void categorySummary(struct ExpenseManager *manager)
 {
+    if (manager->count == 0)
+    {
+        printf("No expenses available for category summary.\n");
+        pauseScreen();
+        return;
+    }
+
     char categories[MAX_EXPENSES][50];
     float categoryTotals[MAX_EXPENSES] = {0};
     int categoryCounts[MAX_EXPENSES] = {0};
@@ -531,4 +536,6 @@ void categorySummary(struct ExpenseManager *manager)
     }
 
     printf("--------------------------------------------------\n");
+
+    pauseScreen();
 }

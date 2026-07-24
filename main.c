@@ -116,7 +116,7 @@ int main()
                 break;
 
             case 3:
-                sortExpensesByDate(&manager, 1);    
+                sortExpensesByDate(&manager, 1);
                 break;
 
             case 4:

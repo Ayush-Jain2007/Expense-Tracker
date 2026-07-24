@@ -28,6 +28,9 @@ struct ExpenseManager
 
 int isValidDate(int day, int month, int year);
 int findExpenseById(struct ExpenseManager *manager, int id);
+void displayExpense(struct Expense *expense);
+void displayExpenseTableHeader(void);
+void displayExpenseTableLine(void);
 
 void addNewExpense(struct ExpenseManager *manager);
 void viewAllExpenses(struct ExpenseManager *manager);

@@ -64,3 +64,10 @@ float getFloat(const char *prompt)
         clearInputBuffer();
     }
 }
+
+void pauseScreen(void)
+{
+    printf("\nPress Enter to continue...");
+    clearInputBuffer();
+    getchar();
+}
