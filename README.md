@@ -8,7 +8,7 @@ The project is being developed incrementally to practice core C programming conc
 
 ## Current Version
 
-**Version 2.2 — Integer-Based Monetary Value Handling**
+**Version 2.3 — Improved File Error Handling**
 
 ---
 
@@ -305,7 +305,8 @@ Enter Month: 7
 Enter Year: 2026
 ```
 
-The expense is validated and then saved to `expenses.dat`.
+The expense is validated, converted to integer cents for internal storage, and then 
+saved to `expenses.dat`.
 
 ---
 
@@ -439,7 +440,60 @@ If no matching expenses are found, the program displays an appropriate message.
 
 ---
 
-### 7. View Total Spending Summary
+### 7. Sort Expenses
+
+The program provides sorting options:
+
+```text
+===============================================================================
+                                  SORT EXPENSES
+===============================================================================
+
+  [1] Sort By Amount (Low to High)
+  [2] Sort By Amount (High to Low)
+  [3] Sort By Date (Oldest to Newest)
+  [4] Sort By Date (Newest to Oldest)
+  [5] Return
+
+-------------------------------------------------------------------------------
+```
+
+Expenses can be sorted by:
+
+* Amount — Low to High
+* Amount — High to Low
+* Date — Oldest to Newest
+* Date — Newest to Oldest
+
+The sorted expenses are saved to the binary file.
+
+---
+
+### 8. Category Summary
+
+Displays spending grouped by category:
+
+```text
+==================================================
+                 CATEGORY SUMMARY
+==================================================
+Category             | Expenses   | Total Spent
+--------------------------------------------------
+Food                 | 3          | $3230.75
+Transport            | 2          | $1275.50
+Bills                | 2          | $3449.75
+--------------------------------------------------
+```
+
+The summary displays:
+
+* The category name
+* Number of expenses in that category
+* Total amount spent in that category
+
+---
+
+### 9. View Total Spending Summary
 
 Displays financial statistics based on the recorded expenses:
 
@@ -449,13 +503,29 @@ Displays financial statistics based on the recorded expenses:
 ==================================================
 
   +----------------------------------------------+
-  |  TOTAL SPENT :  2500.50                      |
+  |  TOTAL SPENT :  $2500.50                      |
   |  TOTAL ITEMS :     3                         |
-  |  AVERAGE COST:   833.50/item                 |
+  |  AVERAGE COST:   $833.50/item                 |
   +----------------------------------------------+
 
-  [!] Largest Expense :  1250.50 (Grocery Shopping)
-  [*] Smallest Expense:  250.00 (Transport)
+  [!] Largest Expense :  $1250.50 (Grocery Shopping)
+  [*] Smallest Expense:  $250.00 (Transport)
+```
+
+The summary displays:
+
+* Total amount spent
+* Total number of expenses
+* Average expense amount
+* Largest expense
+* Smallest expense
+
+---
+
+### 10. Exit Application
+
+```text
+Exiting...
 ```
 
 ---
@@ -645,6 +715,13 @@ This project uses several important C programming concepts:
 * Preserved sorting functionality with integer monetary values
 * Improved monetary calculation reliability
 
+### Version 2.3 — Improved File Error Handling
+
+* Added validation for `fread()` operations
+* Added validation for `fwrite()` operations
+* Added handling for incomplete or corrupted expense files
+* Improved reliability of file persistence
+
 ---
 
 ## Current Limitations
@@ -652,7 +729,6 @@ This project uses several important C programming concepts:
 * Maximum of 100 expenses
 * Expenses are stored in a binary file
 * Input handling can be further improved
-* Some input logic is repeated across multiple functions
 
 ---
 
@@ -671,9 +747,9 @@ This project uses several important C programming concepts:
 * [x] Generate category-wise spending summaries
 * [x] Create reusable input handling utilities
 * [x] Improve monetary value handling using integer cents instead of `float`
+* [x] Improve error handling for file operations
 * [ ] Add a build system such as a `Makefile`
 * [ ] Replace fixed-size storage with dynamic memory
-* [ ] Improve error handling for file operations
 
 ---
 
