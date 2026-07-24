@@ -226,14 +226,14 @@ void spendSummary(struct ExpenseManager *manager)
 
     printf("  +------------------------------------------------------+\n");
 
-    printf("  |  TOTAL SPENT   :  $%ld.%02ld                         |\n",
+    printf("  |  TOTAL SPENT   :  $%ld.%02ld                        |\n",
         total_spent / 100,
         total_spent % 100);
 
     printf("  |  TOTAL ITEMS   :  %10d                         |\n",
         manager->count);
 
-    printf("  |  AVERAGE COST  :  $%ld.%02ld / item                  |\n",
+    printf("  |  AVERAGE COST  :  $%ld.%02ld / item                 |\n",
         average_cost / 100,
         average_cost % 100);
 

@@ -8,7 +8,7 @@ The project is being developed incrementally to practice core C programming conc
 
 ## Current Version
 
-**Version 2.5.0 — Makefile Build System**
+**v2.5.1 — Monetary Summary Fix**
 
 ---
 
@@ -509,9 +509,9 @@ Displays financial statistics based on the recorded expenses:
 ==================================================
 
   +----------------------------------------------+
-  |  TOTAL SPENT :  $2500.50                      |
+  |  TOTAL SPENT :  $2500.50                     |
   |  TOTAL ITEMS :     3                         |
-  |  AVERAGE COST:   $833.50/item                 |
+  |  AVERAGE COST:   $833.50/item                |
   +----------------------------------------------+
 
   [!] Largest Expense :  $1250.50 (Grocery Shopping)
